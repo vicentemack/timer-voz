@@ -1,0 +1,47 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'mx.vicentemack.timervoz'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'mx.vicentemack.timervoz'
+        minSdk 26
+        targetSdk 34
+        versionCode 1
+        versionName '1.0'
+    }
+
+    // Firma fija para que cada version nueva se instale encima de la anterior.
+    signingConfigs {
+        firma {
+            storeFile file('firma.p12')
+            storeType 'pkcs12'
+            storePassword 'timervoz'
+            keyAlias 'timervoz'
+            keyPassword 'timervoz'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.firma
+        }
+        debug {
+            signingConfig signingConfigs.firma
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+}

@@ -1,0 +1,55 @@
+name: App Android
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'android/**'
+      - '.github/workflows/android.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  compilar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Compilar la app
+        working-directory: android
+        run: |
+          set -o pipefail
+          gradle assembleRelease --no-daemon --stacktrace 2>&1 | tee ../compilacion.log
+
+      - name: Errores (si fallo)
+        if: failure()
+        run: |
+          grep -nE "error:|e: |What went wrong|FAILED|Exception" compilacion.log | head -30 | while IFS= read -r l; do echo "::error::${l}"; done
+
+      - name: Publicar la app
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp android/app/build/outputs/apk/release/app-release.apk TimerVoz.apk
+          gh release delete app-android --yes --cleanup-tag || true
+          gh release create app-android TimerVoz.apk --target "$GITHUB_SHA" --title "App Timer voz (Android)" --notes "Compilada del commit ${GITHUB_SHA::7}." --latest=false
+
+      - name: Guardar el registro
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view registro-android > /dev/null 2>&1 || gh release create registro-android --target "$GITHUB_SHA" --title "Registro de compilacion (Android)" --notes "Ultimo registro de la compilacion de la app." --prerelease --latest=false
+          gh release upload registro-android compilacion.log --clobber
