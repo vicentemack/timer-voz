@@ -1,6 +1,6 @@
 // Timer voz: guarda la página en el celular para que abra aunque no haya señal en el campo.
 // Primero intenta la red (3 s) para traer cambios; si no hay, usa la copia guardada.
-const CACHE = 'timer-voz-v5';
+const CACHE = 'timer-voz-v6';
 const ARCHIVOS = ['./', './index.html', './manifest.webmanifest', './icono-192.png', './icono-512.png'];
 
 self.addEventListener('install', (e) => {
