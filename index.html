@@ -102,14 +102,13 @@
   <section class="caja">
     <h2>Qué dice en tus audífonos</h2>
     <dl class="guia">
-      <dt>Al picar el azul</dt><dd>“bien tieso, así como te gusta”</dd>
-      <dt>A los 5 segundos</dt><dd>“armado. Ahora sí, no te me agüites”</dd>
-      <dt>Al arrancar el tiempo</dt><dd>“órale, a darle en chinga”</dd>
-      <dt>Quedan 60 s</dt><dd>“sesenta, dispárale, no lo estés enamorando”</dd>
-      <dt>Quedan 45 s</dt><dd>“cuarenta y cinco, muévete, que te están saliendo raíces”</dd>
-      <dt>Quedan 25 s</dt><dd>“veinticinco, ponte vergas, que no llegas”</dd>
-      <dt>Quedan 10 s</dt><dd>“diez, valiste madre, mi rey”</dd>
-      <dt>En 0</dt><dd>un pitido y “Mamaste, tanto tiro pa’ esto, ya ni la chingas. Abre el cerrojo y enséñale la bandera al R. O., y ponte a entrenar, cabrón”</dd>
+      <dt>Al picar el azul</dt><dd>“Prepárate. Cinco segundos para que se arme el timer”</dd>
+      <dt>A los 5 segundos</dt><dd>“Armado. Ya puedes decirle listo al R. O.”</dd>
+      <dt>Al arrancar el tiempo</dt><dd>6 pitidos cortos</dd>
+      <dt>Quedan 60, 45 y 25 s</dt><dd>“sesenta”, “cuarenta y cinco”, “veinticinco”</dd>
+      <dt>Últimos 10 s</dt><dd>“diez, nueve, ocho… uno” (con el timer v3.31)</dd>
+      <dt>En 0</dt><dd>6 pitidos largos; con la v3.31 el timer se apaga 30 s después</dd>
+      <dt>Al prender el timer</dt><dd>se conecta solo, si esta página sigue abierta, y dice “conectado”</dd>
     </dl>
   </section>
 
@@ -135,20 +134,22 @@
 
 <script>
 'use strict';
-// Protocolo del timer StickS3 v3.30 (Bluetooth de bajo consumo).
+// Protocolo del timer StickS3 v3.31 (Bluetooth de bajo consumo).
 const SERVICIO = '6f3c0001-5b1a-4c7e-9d2a-3e1f5a7b9c10';
 const AVISOS = '6f3c0002-5b1a-4c7e-9d2a-3e1f5a7b9c10';
 const NOMBRE = 'TimerS3';
+// Lo que dice por los audífonos (se escribe como se pronuncia: "táimer", "erre o").
 const FRASES = {
-  LISTO: 'bien tieso, así como te gusta',
-  ARMADO: 'armado. Ahora sí, no te me agüites',
-  INICIO: 'órale, a darle en chinga',
-  Q60: 'sesenta, dispárale, no lo estés enamorando',
-  Q45: 'cuarenta y cinco, muévete, que te están saliendo raíces',
-  Q25: 'veinticinco, ponte vergas, que no llegas',
-  Q10: 'diez, valiste madre, mi rey',
+  LISTO: 'Prepárate. Cinco segundos para que se arme el táimer',
+  ARMADO: 'Armado. Ya puedes decirle listo al erre o',
+  Q60: 'sesenta',
+  Q45: 'cuarenta y cinco',
+  Q25: 'veinticinco',
+  Q10: 'diez', Q9: 'nueve', Q8: 'ocho', Q7: 'siete', Q6: 'seis',
+  Q5: 'cinco', Q4: 'cuatro', Q3: 'tres', Q2: 'dos', Q1: 'uno',
 };
-const FRASE_FIN = 'Mamaste, tanto tiro pa esto, ya ni la chingas. Abre el cerrojo y enséñale la bandera al erre o, y ponte a entrenar, cabrón';
+const CORTO = { dura: 0.12, pausa: 0.12 };   // 6 pitidos cortos al arrancar el tiempo
+const LARGO = { dura: 0.5, pausa: 0.25 };    // 6 pitidos largos en 0
 const FASES = { L: 'Listo', E: 'Espera', A: 'Armado', C: 'Corriendo', T: 'Terminó' };
 
 const $ = (id) => document.getElementById(id);
@@ -245,20 +246,29 @@ function ajustarDespertador() {         // un tono de 30 Hz casi en cero: no se 
   }
 }
 
-function pitido() {
-  if (!audio) { anotar('Toca la página una vez para que pueda sonar'); return; }
-  const t = audio.currentTime + 0.02;
-  const o = audio.createOscillator();
-  const g = audio.createGain();
-  o.type = 'sine';
-  o.frequency.value = 1000;
-  g.gain.setValueAtTime(0, t);
-  g.gain.linearRampToValueAtTime(0.9, t + 0.02);
-  g.gain.setValueAtTime(0.9, t + 0.75);
-  g.gain.linearRampToValueAtTime(0, t + 0.8);
-  o.connect(g).connect(audio.destination);
-  o.start(t);
-  o.stop(t + 0.85);
+function pitidos(n, tipo) {               // n pitidos de 1,000 Hz; regresa cuántos ms duran
+  if (!audio) { anotar('Toca la página una vez para que pueda sonar'); return 0; }
+  if (audio.state === 'suspended') audio.resume();
+  let t = audio.currentTime + 0.03;
+  for (let i = 0; i < n; i++) {
+    const o = audio.createOscillator();
+    const g = audio.createGain();
+    o.type = 'sine';
+    o.frequency.value = 1000;
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(0.9, t + 0.01);
+    g.gain.setValueAtTime(0.9, t + tipo.dura - 0.01);
+    g.gain.linearRampToValueAtTime(0, t + tipo.dura);
+    o.connect(g).connect(audio.destination);
+    o.start(t);
+    o.stop(t + tipo.dura + 0.02);
+    t += tipo.dura + tipo.pausa;
+  }
+  return Math.round((t - audio.currentTime) * 1000);
+}
+
+function callar() {                     // corta la voz para que los pitidos salgan limpios
+  if ('speechSynthesis' in window) speechSynthesis.cancel();
 }
 
 // ---------- pantalla prendida ----------
@@ -327,7 +337,8 @@ function alRecibir(evento) {
   const partes = texto.split(',');
   const clave = partes[0];
   if (FRASES[clave]) hablar(FRASES[clave]);
-  else if (clave === 'FIN') { pitido(); setTimeout(() => hablar(FRASE_FIN), 900); }
+  else if (clave === 'INICIO') { callar(); pitidos(6, CORTO); }   // arrancó el tiempo
+  else if (clave === 'FIN') { callar(); pitidos(6, LARGO); }      // se acabó el tiempo
   if (clave === 'LISTO') $('fase').textContent = 'Espera';
   if (clave === 'ARMADO') $('fase').textContent = 'Armado';
   if (clave === 'INICIO') {
@@ -419,15 +430,22 @@ $('btnDesconectar').addEventListener('click', () => {
 
 $('btnProbar').addEventListener('click', async () => {
   prepararAudio();
-  anotar('Prueba de voz');
-  if ('speechSynthesis' in window) speechSynthesis.cancel();
-  for (const clave of ['LISTO', 'ARMADO', 'INICIO', 'Q60', 'Q45', 'Q25', 'Q10']) {
+  anotar('Prueba de voz y pitidos');
+  callar();
+  await hablarYEsperar(FRASES.LISTO);
+  await esperar(400);
+  await hablarYEsperar(FRASES.ARMADO);
+  await esperar(600);
+  await esperar(pitidos(6, CORTO) + 500);
+  for (const clave of ['Q60', 'Q45', 'Q25']) {
     await hablarYEsperar(FRASES[clave]);
-    await esperar(400);
+    await esperar(500);
   }
-  pitido();
-  await esperar(900);
-  await hablarYEsperar(FRASE_FIN);
+  for (let s = 10; s >= 1; s--) {          // la cuenta, un número por segundo
+    hablar(FRASES['Q' + s]);
+    await esperar(1000);
+  }
+  pitidos(6, LARGO);
 });
 
 if (!navigator.bluetooth) $('noSoporta').hidden = false;
