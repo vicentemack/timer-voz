@@ -102,13 +102,13 @@
   <section class="caja">
     <h2>Qué dice en tus audífonos</h2>
     <dl class="guia">
-      <dt>Al picar el azul</dt><dd>“listo”</dd>
-      <dt>A los 5 segundos</dt><dd>“armado”</dd>
-      <dt>Quedan 60 s</dt><dd>“sesenta”</dd>
-      <dt>Quedan 45 s</dt><dd>“apúrale wey”</dd>
-      <dt>Quedan 25 s</dt><dd>“no vas a acabar, puñetas”</dd>
-      <dt>Quedan 10 s</dt><dd>“ya te chingaste”</dd>
-      <dt>En 0</dt><dd>un pitido y “te mamaste el tiempo”</dd>
+      <dt>Al picar el azul</dt><dd>“bien tieso, así como te gusta”</dd>
+      <dt>A los 5 segundos</dt><dd>“armado, no la vayas a cagar”</dd>
+      <dt>Quedan 60 s</dt><dd>“sesenta, se te está acabando el tiempo, apúrale”</dd>
+      <dt>Quedan 45 s</dt><dd>“cuarenta y cinco, pareces viejita”</dd>
+      <dt>Quedan 25 s</dt><dd>“veinticinco, no vas a acabar, puñetas”</dd>
+      <dt>Quedan 10 s</dt><dd>“diez, ya te chingaste”</dd>
+      <dt>En 0</dt><dd>un pitido y “ni cómo ayudarte, te mamaste el tiempo”</dd>
     </dl>
   </section>
 
@@ -138,8 +138,15 @@
 const SERVICIO = '6f3c0001-5b1a-4c7e-9d2a-3e1f5a7b9c10';
 const AVISOS = '6f3c0002-5b1a-4c7e-9d2a-3e1f5a7b9c10';
 const NOMBRE = 'TimerS3';
-const FRASES = { LISTO: 'listo', ARMADO: 'armado', Q60: 'sesenta', Q45: 'apúrale wey', Q25: 'no vas a acabar, puñetas', Q10: 'ya te chingaste' };
-const FRASE_FIN = 'te mamaste el tiempo';
+const FRASES = {
+  LISTO: 'bien tieso, así como te gusta',
+  ARMADO: 'armado, no la vayas a cagar',
+  Q60: 'sesenta, se te está acabando el tiempo, apúrale',
+  Q45: 'cuarenta y cinco, pareces viejita',
+  Q25: 'veinticinco, no vas a acabar, puñetas',
+  Q10: 'diez, ya te chingaste',
+};
+const FRASE_FIN = 'ni cómo ayudarte, te mamaste el tiempo';
 const FASES = { L: 'Listo', E: 'Espera', A: 'Armado', C: 'Corriendo', T: 'Terminó' };
 
 const $ = (id) => document.getElementById(id);
@@ -176,13 +183,31 @@ if ('speechSynthesis' in window) {
   speechSynthesis.addEventListener('voiceschanged', elegirVoz);
 }
 
-function hablar(texto) {
-  if (!('speechSynthesis' in window)) { anotar('Este navegador no tiene voz'); return; }
+function crearFrase(texto) {
   const u = new SpeechSynthesisUtterance(texto);
   u.lang = voz ? voz.lang : 'es-MX';
   if (voz) u.voice = voz;
   u.rate = 1.05;
   u.volume = 1;
+  return u;
+}
+
+function hablarYEsperar(texto) {         // para la prueba: dice una frase y espera a que termine
+  return new Promise((listo) => {
+    if (!('speechSynthesis' in window)) { listo(); return; }
+    const u = crearFrase(texto);
+    let hecho = false;
+    const fin = () => { if (!hecho) { hecho = true; listo(); } };
+    u.onend = fin;
+    u.onerror = fin;
+    setTimeout(fin, 7000);
+    speechSynthesis.speak(u);
+  });
+}
+
+function hablar(texto) {
+  if (!('speechSynthesis' in window)) { anotar('Este navegador no tiene voz'); return; }
+  const u = crearFrase(texto);
   if (speechSynthesis.speaking || speechSynthesis.pending) {   // corta lo anterior y dice lo nuevo
     speechSynthesis.cancel();
     setTimeout(() => speechSynthesis.speak(u), 60);
@@ -392,11 +417,15 @@ $('btnDesconectar').addEventListener('click', () => {
 
 $('btnProbar').addEventListener('click', async () => {
   prepararAudio();
-  const prueba = [['listo', 0], ['armado', 1500], ['sesenta', 3000], ['apúrale wey', 4600], ['no vas a acabar, puñetas', 6400], ['ya te chingaste', 8800]];
-  for (const [frase, ms] of prueba) setTimeout(() => hablar(frase), ms);
-  setTimeout(pitido, 10400);
-  setTimeout(() => hablar(FRASE_FIN), 11300);
   anotar('Prueba de voz');
+  if ('speechSynthesis' in window) speechSynthesis.cancel();
+  for (const clave of ['LISTO', 'ARMADO', 'Q60', 'Q45', 'Q25', 'Q10']) {
+    await hablarYEsperar(FRASES[clave]);
+    await esperar(400);
+  }
+  pitido();
+  await esperar(900);
+  await hablarYEsperar(FRASE_FIN);
 });
 
 if (!navigator.bluetooth) $('noSoporta').hidden = false;
