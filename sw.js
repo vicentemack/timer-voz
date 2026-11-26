@@ -1,6 +1,6 @@
 // Timer voz: guarda la página en el celular para que abra aunque no haya señal en el campo.
 // Primero intenta la red (3 s) para traer cambios; si no hay, usa la copia guardada.
-const CACHE = 'timer-voz-v2';
+const CACHE = 'timer-voz-v3';
 const ARCHIVOS = ['./', './index.html', './manifest.webmanifest', './icono-192.png', './icono-512.png'];
 
 self.addEventListener('install', (e) => {
@@ -19,7 +19,8 @@ self.addEventListener('fetch', (e) => {
     const control = new AbortController();
     const reloj = setTimeout(() => control.abort(), 3000);
     try {
-      const r = await fetch(e.request, { signal: control.signal });
+      // no-cache: siempre pregunta a GitHub si hay version nueva (si no cambio, contesta rapido)
+      const r = await fetch(new Request(e.request.url, { cache: 'no-cache', credentials: 'same-origin' }), { signal: control.signal });
       clearTimeout(reloj);
       if (r.ok) {
         const copia = r.clone();
