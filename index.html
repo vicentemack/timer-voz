@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Timer voz</title>
-<meta name="description" content="Voz del timer StickS3 en tus audífonos: listo, armado, 60, 45, 25, 10 y un pitido al final.">
+<meta name="description" content="Voz del timer StickS3 en tus audífonos: listo, armado y cuánto tiempo te queda.">
 <meta name="theme-color" content="#0b0d10">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icono-192.png">
@@ -105,10 +105,10 @@
       <dt>Al picar el azul</dt><dd>“listo”</dd>
       <dt>A los 5 segundos</dt><dd>“armado”</dd>
       <dt>Quedan 60 s</dt><dd>“sesenta”</dd>
-      <dt>Quedan 45 s</dt><dd>“cuarenta y cinco”</dd>
-      <dt>Quedan 25 s</dt><dd>“veinticinco”</dd>
-      <dt>Quedan 10 s</dt><dd>“diez”</dd>
-      <dt>En 0</dt><dd>un pitido</dd>
+      <dt>Quedan 45 s</dt><dd>“apúrale wey”</dd>
+      <dt>Quedan 25 s</dt><dd>“no vas a acabar, puñetas”</dd>
+      <dt>Quedan 10 s</dt><dd>“ya te chingaste”</dd>
+      <dt>En 0</dt><dd>un pitido y “te mamaste el tiempo”</dd>
     </dl>
   </section>
 
@@ -138,7 +138,8 @@
 const SERVICIO = '6f3c0001-5b1a-4c7e-9d2a-3e1f5a7b9c10';
 const AVISOS = '6f3c0002-5b1a-4c7e-9d2a-3e1f5a7b9c10';
 const NOMBRE = 'TimerS3';
-const FRASES = { LISTO: 'listo', ARMADO: 'armado', Q60: 'sesenta', Q45: 'cuarenta y cinco', Q25: 'veinticinco', Q10: 'diez' };
+const FRASES = { LISTO: 'listo', ARMADO: 'armado', Q60: 'sesenta', Q45: 'apúrale wey', Q25: 'no vas a acabar, puñetas', Q10: 'ya te chingaste' };
+const FRASE_FIN = 'te mamaste el tiempo';
 const FASES = { L: 'Listo', E: 'Espera', A: 'Armado', C: 'Corriendo', T: 'Terminó' };
 
 const $ = (id) => document.getElementById(id);
@@ -299,7 +300,7 @@ function alRecibir(evento) {
   const partes = texto.split(',');
   const clave = partes[0];
   if (FRASES[clave]) hablar(FRASES[clave]);
-  else if (clave === 'FIN') pitido();
+  else if (clave === 'FIN') { pitido(); setTimeout(() => hablar(FRASE_FIN), 900); }
   if (clave === 'LISTO') $('fase').textContent = 'Espera';
   if (clave === 'ARMADO') $('fase').textContent = 'Armado';
   if (clave === 'INICIO') {
@@ -391,9 +392,10 @@ $('btnDesconectar').addEventListener('click', () => {
 
 $('btnProbar').addEventListener('click', async () => {
   prepararAudio();
-  const prueba = [['listo', 0], ['armado', 1500], ['sesenta', 3000], ['cuarenta y cinco', 4600], ['veinticinco', 6400], ['diez', 8100]];
+  const prueba = [['listo', 0], ['armado', 1500], ['sesenta', 3000], ['apúrale wey', 4600], ['no vas a acabar, puñetas', 6400], ['ya te chingaste', 8800]];
   for (const [frase, ms] of prueba) setTimeout(() => hablar(frase), ms);
-  setTimeout(pitido, 9400);
+  setTimeout(pitido, 10400);
+  setTimeout(() => hablar(FRASE_FIN), 11300);
   anotar('Prueba de voz');
 });
 

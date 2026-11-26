@@ -1,7 +1,7 @@
 {
   "name": "Timer voz — StickS3",
   "short_name": "Timer voz",
-  "description": "Voz del timer StickS3 en tus audífonos: listo, armado, 60, 45, 25, 10 y un pitido al final.",
+  "description": "Voz del timer StickS3 en tus audífonos: listo, armado y cuánto tiempo te queda.",
   "lang": "es-MX",
   "start_url": "./",
   "scope": "./",
