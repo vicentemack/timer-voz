@@ -1,0 +1,17 @@
+{
+  "name": "Timer voz — StickS3",
+  "short_name": "Timer voz",
+  "description": "Voz del timer StickS3 en tus audífonos: listo, armado, 60, 45, 25, 10 y un pitido al final.",
+  "lang": "es-MX",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b0d10",
+  "theme_color": "#0b0d10",
+  "icons": [
+    { "src": "icono-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icono-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icono-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

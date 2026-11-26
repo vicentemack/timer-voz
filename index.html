@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Timer voz</title>
+<meta name="description" content="Voz del timer StickS3 en tus audífonos: listo, armado, 60, 45, 25, 10 y un pitido al final.">
+<meta name="theme-color" content="#0b0d10">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icono-192.png">
+<link rel="apple-touch-icon" href="icono-192.png">
+<style>
+  :root {
+    --fondo: #0b0d10;
+    --panel: #161a20;
+    --borde: #2a3038;
+    --texto: #f2f4f7;
+    --tenue: #9aa4b1;
+    --verde: #2fd36b;
+    --amarillo: #ffd60a;
+    --rojo: #ff453a;
+    --azul: #4da3ff;
+    --boton: #2fd36b;
+    --boton-texto: #04130a;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--fondo); color: var(--texto); }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 17px; line-height: 1.4;
+    padding: max(16px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+  }
+  main { max-width: 520px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  h1 { font-size: 22px; margin: 0; letter-spacing: .2px; }
+  h2 { font-size: 15px; margin: 0 0 6px; color: var(--tenue); font-weight: 600; text-transform: uppercase; letter-spacing: .6px; }
+  .pill { font-size: 14px; font-weight: 700; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--borde); white-space: nowrap; }
+  .pill.no { color: var(--tenue); }
+  .pill.espera { color: #111; background: var(--amarillo); border-color: var(--amarillo); }
+  .pill.ok { color: #04130a; background: var(--verde); border-color: var(--verde); }
+  .tablero {
+    border-radius: 18px; padding: 16px; text-align: center;
+    background: var(--panel); border: 1px solid var(--borde);
+  }
+  .tablero.listo { background: #000; color: #fff; }
+  .tablero.armado { background: #000; color: var(--verde); }
+  .tablero.verde { background: var(--verde); color: #000; }
+  .tablero.amarillo { background: var(--amarillo); color: #000; }
+  .tablero.rojo { background: var(--rojo); color: #fff; }
+  .fase { font-size: 20px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; min-height: 28px; }
+  .segundos { font-size: 120px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; margin: 6px 0 10px; }
+  .fila { display: flex; justify-content: space-around; font-size: 17px; }
+  .fila b { font-size: 22px; }
+  button {
+    font: inherit; font-weight: 700; font-size: 19px; width: 100%;
+    min-height: 58px; border-radius: 14px; border: 1px solid var(--borde);
+    background: var(--panel); color: var(--texto); padding: 12px 16px; cursor: pointer;
+  }
+  button.primario { background: var(--boton); color: var(--boton-texto); border-color: var(--boton); }
+  button:active { transform: translateY(1px); }
+  button:disabled { opacity: .5; }
+  .aviso { background: #3a1412; border: 1px solid var(--rojo); color: #ffd9d6; border-radius: 12px; padding: 12px 14px; }
+  .nota { color: var(--tenue); font-size: 15px; margin: 0; }
+  details { background: var(--panel); border: 1px solid var(--borde); border-radius: 14px; padding: 4px 14px; }
+  summary { font-weight: 700; padding: 10px 0; cursor: pointer; }
+  label { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-top: 1px solid var(--borde); }
+  label input { width: 24px; height: 24px; margin: 1px 0 0; flex: none; accent-color: var(--verde); }
+  details button { margin: 10px 0 12px; min-height: 50px; font-size: 17px; }
+  .guia { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; }
+  .guia dt { color: var(--tenue); }
+  .guia dd { margin: 0; font-weight: 700; }
+  ol#bitacora { margin: 0; padding: 0; list-style: none; font-family: ui-monospace, "Roboto Mono", monospace; font-size: 14px; color: var(--tenue); max-height: 220px; overflow-y: auto; }
+  ol#bitacora li { padding: 3px 0; border-top: 1px solid var(--borde); overflow-wrap: anywhere; }
+  section.caja { background: var(--panel); border: 1px solid var(--borde); border-radius: 14px; padding: 12px 14px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Timer voz</h1>
+    <span id="estadoConexion" class="pill no">Sin conectar</span>
+  </header>
+
+  <section id="tablero" class="tablero" aria-live="polite">
+    <div id="fase" class="fase">Sin timer</div>
+    <div id="segundos" class="segundos">—</div>
+    <div class="fila">
+      <span>Tiros <b id="tiros">—</b></span>
+      <span>Batería <b id="bateria">—</b></span>
+    </div>
+  </section>
+
+  <div id="noSoporta" class="aviso" hidden>
+    Este navegador no puede usar Bluetooth. Abre esta página en <b>Chrome</b> de tu celular Android.
+  </div>
+
+  <button id="btnConectar" class="primario">Conectar con el timer</button>
+  <button id="btnProbar">Probar voz y pitido</button>
+  <p class="nota">Prende el timer, toca <b>Conectar</b> y escoge <b>TimerS3</b>. Deja esta página abierta y la
+    pantalla prendida durante el match: si apagas el timer y lo vuelves a prender, se reconecta solo.</p>
+
+  <section class="caja">
+    <h2>Qué dice en tus audífonos</h2>
+    <dl class="guia">
+      <dt>Al picar el azul</dt><dd>“listo”</dd>
+      <dt>A los 5 segundos</dt><dd>“armado”</dd>
+      <dt>Quedan 60 s</dt><dd>“sesenta”</dd>
+      <dt>Quedan 45 s</dt><dd>“cuarenta y cinco”</dd>
+      <dt>Quedan 25 s</dt><dd>“veinticinco”</dd>
+      <dt>Quedan 10 s</dt><dd>“diez”</dd>
+      <dt>En 0</dt><dd>un pitido</dd>
+    </dl>
+  </section>
+
+  <details>
+    <summary>Ajustes</summary>
+    <label><input type="checkbox" id="optPantalla" checked>
+      <span>Mantener la pantalla prendida mientras está conectado</span></label>
+    <label><input type="checkbox" id="optDespierto" checked>
+      <span>Mantener despiertos los audífonos, para que no se coman la primera sílaba</span></label>
+    <label><input type="checkbox" id="optConectado" checked>
+      <span>Decir “conectado” cuando se conecta el timer</span></label>
+    <button id="btnDesconectar">Desconectar</button>
+  </details>
+
+  <section class="caja">
+    <h2>Avisos recibidos</h2>
+    <ol id="bitacora"></ol>
+  </section>
+
+  <p class="nota">Para tenerla como app: en Chrome toca el menú <b>⋮</b> y luego
+    <b>Agregar a la pantalla principal</b> (o <b>Instalar app</b>).</p>
+</main>
+
+<script>
+'use strict';
+// Protocolo del timer StickS3 v3.30 (Bluetooth de bajo consumo).
+const SERVICIO = '6f3c0001-5b1a-4c7e-9d2a-3e1f5a7b9c10';
+const AVISOS = '6f3c0002-5b1a-4c7e-9d2a-3e1f5a7b9c10';
+const NOMBRE = 'TimerS3';
+const FRASES = { LISTO: 'listo', ARMADO: 'armado', Q60: 'sesenta', Q45: 'cuarenta y cinco', Q25: 'veinticinco', Q10: 'diez' };
+const FASES = { L: 'Listo', E: 'Espera', A: 'Armado', C: 'Corriendo', T: 'Terminó' };
+
+const $ = (id) => document.getElementById(id);
+let dispositivo = null;
+let quiereConexion = false;
+let reconectando = false;
+let audio = null;
+let despertador = null;
+let candado = null;
+let voz = null;
+let totalEtapa = 105;
+
+// ---------- guardar ajustes en este celular ----------
+for (const id of ['optPantalla', 'optDespierto', 'optConectado']) {
+  try {
+    const v = localStorage.getItem('timer-voz-' + id);
+    if (v !== null) $(id).checked = v === '1';
+  } catch (e) { /* sin almacenamiento: se queda lo de fábrica */ }
+  $(id).addEventListener('change', () => {
+    try { localStorage.setItem('timer-voz-' + id, $(id).checked ? '1' : '0'); } catch (e) {}
+    if (id === 'optDespierto') ajustarDespertador();
+    if (id === 'optPantalla') { if ($(id).checked) pedirCandado(); else soltarCandado(); }
+  });
+}
+
+// ---------- voz ----------
+function elegirVoz() {
+  const voces = window.speechSynthesis ? speechSynthesis.getVoices() : [];
+  voz = voces.find(v => v.lang === 'es-MX') || voces.find(v => v.lang === 'es-US') ||
+        voces.find(v => (v.lang || '').toLowerCase().startsWith('es')) || null;
+}
+if ('speechSynthesis' in window) {
+  elegirVoz();
+  speechSynthesis.addEventListener('voiceschanged', elegirVoz);
+}
+
+function hablar(texto) {
+  if (!('speechSynthesis' in window)) { anotar('Este navegador no tiene voz'); return; }
+  const u = new SpeechSynthesisUtterance(texto);
+  u.lang = voz ? voz.lang : 'es-MX';
+  if (voz) u.voice = voz;
+  u.rate = 1.05;
+  u.volume = 1;
+  if (speechSynthesis.speaking || speechSynthesis.pending) {   // corta lo anterior y dice lo nuevo
+    speechSynthesis.cancel();
+    setTimeout(() => speechSynthesis.speak(u), 60);
+  } else {
+    speechSynthesis.speak(u);
+  }
+}
+
+// ---------- audio: pitido y audífonos despiertos ----------
+function prepararAudio() {               // siempre desde un toque, para que el celular deje sonar
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!audio && AC) audio = new AC();
+  if (audio && audio.state === 'suspended') audio.resume();
+  ajustarDespertador();
+}
+
+function ajustarDespertador() {         // un tono de 30 Hz casi en cero: no se oye y no deja dormir el Bluetooth
+  if (!audio) return;
+  const quiere = $('optDespierto').checked;
+  if (quiere && !despertador) {
+    const o = audio.createOscillator();
+    const g = audio.createGain();
+    o.frequency.value = 30;
+    g.gain.value = 0.0008;
+    o.connect(g).connect(audio.destination);
+    o.start();
+    despertador = { o, g };
+  } else if (!quiere && despertador) {
+    despertador.o.stop();
+    despertador.o.disconnect();
+    despertador.g.disconnect();
+    despertador = null;
+  }
+}
+
+function pitido() {
+  if (!audio) { anotar('Toca la página una vez para que pueda sonar'); return; }
+  const t = audio.currentTime + 0.02;
+  const o = audio.createOscillator();
+  const g = audio.createGain();
+  o.type = 'sine';
+  o.frequency.value = 1000;
+  g.gain.setValueAtTime(0, t);
+  g.gain.linearRampToValueAtTime(0.9, t + 0.02);
+  g.gain.setValueAtTime(0.9, t + 0.75);
+  g.gain.linearRampToValueAtTime(0, t + 0.8);
+  o.connect(g).connect(audio.destination);
+  o.start(t);
+  o.stop(t + 0.85);
+}
+
+// ---------- pantalla prendida ----------
+async function pedirCandado() {
+  if (!$('optPantalla').checked || !quiereConexion || candado) return;
+  if (!('wakeLock' in navigator) || document.visibilityState !== 'visible') return;
+  try {
+    candado = await navigator.wakeLock.request('screen');
+    candado.addEventListener('release', () => { candado = null; });
+  } catch (e) {
+    anotar('No pude dejar la pantalla prendida: ' + e.message);
+  }
+}
+function soltarCandado() {
+  if (candado) { candado.release().catch(() => {}); candado = null; }
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') pedirCandado();
+});
+
+// ---------- lo que se ve ----------
+function mostrarConexion(texto, clase) {
+  const p = $('estadoConexion');
+  p.textContent = texto;
+  p.className = 'pill ' + clase;
+}
+
+function anotar(texto) {
+  const li = document.createElement('li');
+  const hora = new Date().toLocaleTimeString('es-MX', { hour12: false });
+  li.textContent = hora + '  ' + texto;
+  const ol = $('bitacora');
+  ol.prepend(li);
+  while (ol.children.length > 40) ol.lastChild.remove();
+}
+
+function pintarTablero(fase, seg) {
+  const t = $('tablero');
+  let clase = 'listo';
+  if (fase === 'A') clase = 'armado';
+  else if (fase === 'E') clase = 'listo';
+  else if (fase === 'T') clase = 'rojo';
+  else if (fase === 'C') {
+    const pasado = totalEtapa - seg;
+    clase = seg <= 15 ? 'rojo' : (pasado < 60 ? 'verde' : 'amarillo');
+  }
+  t.className = 'tablero ' + clase;
+}
+
+function mostrarEstado(texto) {          // S,segundos,estado,tiros,barras (cada segundo)
+  const [, seg, est, tiros, barras] = texto.split(',');
+  const s = parseInt(seg, 10);
+  $('fase').textContent = FASES[est] || est;
+  $('segundos').textContent = isNaN(s) ? '—' : String(s);
+  $('tiros').textContent = tiros ?? '—';
+  const b = parseInt(barras, 10);
+  $('bateria').textContent = isNaN(b) || b < 0 ? '—' : b + ' de 5';
+  pintarTablero(est, s);
+}
+
+// ---------- avisos del timer ----------
+function alRecibir(evento) {
+  const texto = new TextDecoder().decode(evento.target.value).trim();
+  if (texto.startsWith('S,')) { mostrarEstado(texto); return; }
+  anotar(texto);
+  const partes = texto.split(',');
+  const clave = partes[0];
+  if (FRASES[clave]) hablar(FRASES[clave]);
+  else if (clave === 'FIN') pitido();
+  if (clave === 'LISTO') $('fase').textContent = 'Espera';
+  if (clave === 'ARMADO') $('fase').textContent = 'Armado';
+  if (clave === 'INICIO') {
+    const total = parseInt(partes[1], 10);
+    if (!isNaN(total)) totalEtapa = total;
+    $('fase').textContent = 'Corriendo';
+  }
+  if (clave === 'APAGADO') mostrarConexion('Timer apagado', 'espera');
+}
+
+// ---------- conexión ----------
+function esperar(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function conLimite(promesa, ms) {
+  return Promise.race([promesa, new Promise((_, no) => setTimeout(() => no(new Error('no contestó a tiempo')), ms))]);
+}
+
+async function conectar() {
+  const servidor = await dispositivo.gatt.connect();
+  const servicio = await servidor.getPrimaryService(SERVICIO);
+  const carac = await servicio.getCharacteristic(AVISOS);
+  carac.removeEventListener('characteristicvaluechanged', alRecibir);
+  carac.addEventListener('characteristicvaluechanged', alRecibir);
+  await carac.startNotifications();
+  mostrarConexion('Conectado', 'ok');
+  anotar('Conectado a ' + (dispositivo.name || NOMBRE));
+  if ($('optConectado').checked) hablar('conectado');
+  pedirCandado();
+}
+
+async function reconectar() {
+  if (reconectando) return;
+  reconectando = true;
+  mostrarConexion('Buscando el timer…', 'espera');
+  while (quiereConexion && dispositivo && !dispositivo.gatt.connected) {
+    try {
+      await conLimite(conectar(), 15000);
+    } catch (e) {
+      await esperar(2000);
+    }
+  }
+  reconectando = false;
+}
+
+function alDesconectar() {
+  anotar('Se desconectó el timer');
+  $('fase').textContent = 'Sin timer';
+  $('tablero').className = 'tablero';
+  if (quiereConexion) reconectar();
+  else mostrarConexion('Sin conectar', 'no');
+}
+
+$('btnConectar').addEventListener('click', async () => {
+  prepararAudio();
+  if (!navigator.bluetooth) { $('noSoporta').hidden = false; return; }
+  try {
+    const elegido = await navigator.bluetooth.requestDevice({
+      filters: [{ services: [SERVICIO] }, { namePrefix: NOMBRE }],
+      optionalServices: [SERVICIO],
+    });
+    if (dispositivo && dispositivo !== elegido) {
+      dispositivo.removeEventListener('gattserverdisconnected', alDesconectar);
+      try { dispositivo.gatt.disconnect(); } catch (e) {}
+    }
+    dispositivo = elegido;
+    dispositivo.removeEventListener('gattserverdisconnected', alDesconectar);
+    dispositivo.addEventListener('gattserverdisconnected', alDesconectar);
+    quiereConexion = true;
+    mostrarConexion('Conectando…', 'espera');
+    try {
+      await conLimite(conectar(), 20000);
+    } catch (e) {
+      anotar('No conectó a la primera (' + e.message + '); sigo intentando');
+      reconectar();
+    }
+  } catch (e) {
+    if (e.name === 'NotFoundError') anotar('No escogiste el timer');
+    else anotar('Error: ' + e.message);
+  }
+});
+
+$('btnDesconectar').addEventListener('click', () => {
+  quiereConexion = false;
+  soltarCandado();
+  if (dispositivo && dispositivo.gatt.connected) dispositivo.gatt.disconnect();
+  mostrarConexion('Sin conectar', 'no');
+  anotar('Desconectado a mano');
+});
+
+$('btnProbar').addEventListener('click', async () => {
+  prepararAudio();
+  const prueba = [['listo', 0], ['armado', 1500], ['sesenta', 3000], ['cuarenta y cinco', 4600], ['veinticinco', 6400], ['diez', 8100]];
+  for (const [frase, ms] of prueba) setTimeout(() => hablar(frase), ms);
+  setTimeout(pitido, 9400);
+  anotar('Prueba de voz');
+});
+
+if (!navigator.bluetooth) $('noSoporta').hidden = false;
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>
