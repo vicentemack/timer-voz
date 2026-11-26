@@ -104,6 +104,7 @@
     <dl class="guia">
       <dt>Al picar el azul</dt><dd>“bien tieso, así como te gusta”</dd>
       <dt>A los 5 segundos</dt><dd>“armado. Ahora sí, no te me agüites”</dd>
+      <dt>Al arrancar el tiempo</dt><dd>“¡Arránquese, cabrón!”</dd>
       <dt>Quedan 60 s</dt><dd>“sesenta, dispárale, no lo estés enamorando”</dd>
       <dt>Quedan 45 s</dt><dd>“cuarenta y cinco, muévete, que te están saliendo raíces”</dd>
       <dt>Quedan 25 s</dt><dd>“veinticinco, ponte vergas, que no llegas”</dd>
@@ -141,6 +142,7 @@ const NOMBRE = 'TimerS3';
 const FRASES = {
   LISTO: 'bien tieso, así como te gusta',
   ARMADO: 'armado. Ahora sí, no te me agüites',
+  INICIO: '¡Arránquese, cabrón!',
   Q60: 'sesenta, dispárale, no lo estés enamorando',
   Q45: 'cuarenta y cinco, muévete, que te están saliendo raíces',
   Q25: 'veinticinco, ponte vergas, que no llegas',
@@ -419,7 +421,7 @@ $('btnProbar').addEventListener('click', async () => {
   prepararAudio();
   anotar('Prueba de voz');
   if ('speechSynthesis' in window) speechSynthesis.cancel();
-  for (const clave of ['LISTO', 'ARMADO', 'Q60', 'Q45', 'Q25', 'Q10']) {
+  for (const clave of ['LISTO', 'ARMADO', 'INICIO', 'Q60', 'Q45', 'Q25', 'Q10']) {
     await hablarYEsperar(FRASES[clave]);
     await esperar(400);
   }
