@@ -49,6 +49,7 @@
     .solo-impreso { display: block; }
     h2, h3 { break-after: avoid; } table, .caja, .aviso, .dos { break-inside: avoid; }
     main { padding-top: 0; }
+    .dos { grid-template-columns: 170px 1fr; gap: 14px; }
   }
 </style>
 </head>
@@ -56,7 +57,9 @@
 <main>
   <h1>PRS Timer Voz</h1>
   <p class="sub">Timer y contador de tiros que te dice el tiempo en tus audífonos. Para PRS22 y NRL22.</p>
-  <p>Es un aparatito (el <b>M5StickS3</b>) que va en el riel del rifle, más una <b>app de Android</b>. El aparato lleva el tiempo de la etapa y cuenta tus tiros; la app te avisa en los audífonos cuánto te queda. Lo hicimos con la colaboración de varios tiradores de PRS. Es gratis y es para compartir.</p>
+  <div class="aviso"><b>Versión beta.</b> Este proyecto lo estamos desarrollando entre varios tiradores de PRS en México: compartimos experiencias, comentarios y lo que nos gustaría que hiciera. Lo que creemos que ya funciona bien es el <b>timer con voz</b>, que oyes en los audífonos Bluetooth que usas para tirar. El <b>contador de tiros</b> todavía está en prueba: al día de hoy, 26 de noviembre de 2026, apenas vamos a probar sus sensores con disparos reales, para ajustarlos al sonido del disparo y al retroceso del rifle.</div>
+  <p>Es un aparatito (el <b>M5StickS3</b>) que va en el riel del rifle, más una <b>app de Android</b>. El aparato lleva el tiempo de la etapa y cuenta tus tiros; la app te avisa en tus audífonos cuánto te queda. El programa y la app son gratis y son para compartir.</p>
+  <p>La carcasa para montarlo en el riel la estamos haciendo en colaboración con otro compañero tirador. Les avisaremos cuando esté lista.</p>
 
   <div class="indice no-impreso">
     <b>Contenido:</b>
@@ -74,7 +77,7 @@
     <div>
       <h3 style="margin-top:0">Qué hace</h3>
       <ul>
-        <li><b>Cuenta tus tiros:</b> uno cuenta solo si el micrófono oye el disparo y el aparato siente el golpe de tu rifle al mismo tiempo. El tiro del vecino no mueve tu rifle.</li>
+        <li><b>Cuenta tus tiros</b> (en prueba): uno cuenta solo si el micrófono oye el disparo y el aparato siente el golpe de tu rifle al mismo tiempo. El tiro del vecino no mueve tu rifle.</li>
         <li><b>Lleva el tiempo</b> de la etapa (105 o 120 s) con color en toda la pantalla: verde, amarillo y rojo.</li>
         <li><b>Arranca solo</b> cuando bajas el rifle para acomodarlo en la estación.</li>
         <li><b>Te habla en los audífonos</b> por Bluetooth: “prepárate”, “armado”, 60, 45, 25 y la cuenta del 10 al 1.</li>
@@ -91,12 +94,12 @@
     <tr><td>Cable USB-C <b>de datos</b></td><td>Para cargar el programa desde la computadora. Algunos cables solo cargan: si la computadora no ve el aparato, prueba otro.</td></tr>
     <tr><td>Computadora con <b>Chrome o Edge</b></td><td>Windows o Mac. Solo se usa una vez, para cargar el programa.</td></tr>
     <tr><td>Teléfono <b>Android</b></td><td>Android 8 o más (mejor 10 o más). Puede ser uno viejo y sin línea. <b>En iPhone no funciona.</b></td></tr>
-    <tr><td>Audífonos u orejeras <b>Bluetooth</b></td><td>Los que ya usas con tu teléfono.</td></tr>
-    <tr><td>Montaje en el riel</td><td>Una carcasa impresa en 3D que sujete el aparato firme al riel (sin gomas, para que sienta el golpe).</td></tr>
+    <tr><td>Audífonos u orejeras <b>Bluetooth</b></td><td>Los que ya usas para tirar, conectados a tu teléfono.</td></tr>
+    <tr><td>Montaje en el riel</td><td>Una carcasa que sujete el aparato firme al riel (sin gomas, para que sienta el golpe). La estamos haciendo con otro compañero tirador; les avisaremos cuando esté lista.</td></tr>
   </table>
   <h3>Dónde comprarlo</h3>
   <ul>
-    <li><a href="https://www.amazon.com.mx/M5Stack-Official-M5StickS3-ESP32S3-desarrollo/dp/B0GWHN8HK3">Amazon México</a>: es la misma publicación del de Vicente (B0GWHN8HK3). Revisa precio y existencia antes de comprar.</li>
+    <li><a href="https://www.amazon.com.mx/M5Stack-Official-M5StickS3-ESP32S3-desarrollo/dp/B0GWHN8HK3">Amazon México</a>: es la publicación de la que salió el primero que probamos (B0GWHN8HK3). Revisa precio y existencia antes de comprar.</li>
     <li><a href="https://shop.m5stack.com/products/m5sticks3-esp32s3-mini-iot-dev-kit">Tienda oficial de M5Stack</a> (envío desde China).</li>
     <li>Mercado Libre o AliExpress: búscalo como “M5StickS3” y revisa que sea el <b>K150</b>.</li>
   </ul>
@@ -197,7 +200,7 @@
   </ul>
 
   <h2 id="preguntas">Preguntas y avisos</h2>
-  <div class="aviso"><b>Es un prototipo.</b> Funciona en casa; <b>todavía no se prueba con tiros reales</b> ni en un match. Úsalo primero en entrenamientos.</div>
+  <div class="aviso"><b>Es una versión beta.</b> El timer con voz es lo que creemos que ya funciona bien; el <b>contador de tiros todavía no se ajusta con tiros reales</b> ni se ha usado en un match. Úsalo primero en entrenamientos.</div>
   <ul>
     <li><b>¿Lo puedo usar en un match?</b> El tiempo oficial es el del RO. El StickS3 es solo una referencia para ti, y arranca cuando bajas el rifle, un poco después de la señal del RO. Pregunta al director de match antes de usarlo.</li>
     <li><b>¿Se pelea con mi Kestrel o mi app de balística?</b> No se ha probado todo junto en el mismo teléfono. Haz una etapa de prueba con todo conectado; si hay cortes, usa un teléfono para el timer y otro para la balística.</li>
@@ -219,7 +222,7 @@
     <li><a href="https://drive.google.com/drive/folders/1an5J0CpKaEJ-mXKpKTHvsj7ES79j6TT6">Carpeta en Google Drive</a> (solo para descargar)</li>
     <li><a href="https://github.com/vicentemack/timer-voz">Código en GitHub</a> (programa, app y páginas)</li>
   </ul>
-  <p class="nota">PRS Timer Voz · 26 de noviembre de 2026</p>
+  <p class="nota">PRS Timer Voz · versión beta · 26 de noviembre de 2026</p>
 </main>
 </body>
 </html>
