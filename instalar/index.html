@@ -62,18 +62,20 @@
 <main>
   <h1>PRS Timer Voz</h1>
   <p class="sub">Timer y contador de tiros que te dice el tiempo en tus audífonos. Para PRS22 y NRL22.</p>
-  <div class="aviso"><b>Versión beta.</b> Está hecho por tiradores, para tiradores, y todavía está por perfeccionarse. Lo estamos desarrollando entre varios tiradores de PRS en México: compartimos experiencias, comentarios y lo que nos gustaría que hiciera y que no hiciera, dentro de las limitaciones del aparato. Lo que creemos que ya funciona bien es el <b>timer con voz</b>, que oyes en los audífonos Bluetooth que usas para tirar: ya lo probamos con la pantalla del teléfono apagada y funcionó. El <b>contador de tiros</b> todavía está en prueba: al día de hoy, 26 de noviembre de 2026, apenas vamos a probar sus sensores con disparos reales, para ajustarlos al sonido del disparo y al retroceso del rifle.</div>
-  <p>Usamos el <b>M5StickS3</b> de M5Stack: una microcomputadora programable de 48 × 24 × 15 mm y 20 g, con pantalla a color, micrófono, bocina, acelerómetro, batería y Bluetooth. M5Stack la hizo para control remoto y proyectos de internet de las cosas (IoT), como el control del hogar o los asistentes de voz. <b>No está diseñada para tiro</b>, pero sus características se adaptan a lo que necesitamos: oír el disparo, sentir el retroceso del rifle, mostrar el tiempo y avisarte, por medio del teléfono, en tus audífonos. La estamos probando.</p>
-  <p><b>Dónde comprarlo:</b> <a href="https://www.amazon.com.mx/M5Stack-Official-M5StickS3-ESP32S3-desarrollo/dp/B0GWHN8HK3">Amazon México</a> · <a href="https://www.mercadolibre.com.mx/m5stack-m5sticks3-esp32-s3-portable-iot-development-kit/p/MLM2092221610">Mercado Libre</a> · <a href="https://shop.m5stack.com/products/m5sticks3-esp32s3-mini-iot-dev-kit">tienda oficial de M5Stack</a>, donde también ves las fotos oficiales del aparato. Revisa que sea el <b>M5StickS3</b> (modelo K150).</p>
-  <p>El StickS3 va en el riel del rifle y trabaja con una <b>app de Android</b>: el StickS3 lleva el tiempo de la etapa y cuenta tus tiros, y la app te avisa en tus audífonos cuánto te queda. El programa y la app son gratis y son para compartir.</p>
+  <div class="aviso"><b>Versión beta, hecha por tiradores para tiradores.</b> La desarrollamos entre apasionados del PRS en México. Cada quien puso su granito de arena: experiencias en la estación, comentarios, qué nos funcionaba y qué no, y lo que nos gustaría que hiciera (y que no hiciera), dentro de lo que este aparato permite. ¡Gracias a todos los que ayudaron!<br><br>
+  Todavía está por perfeccionarse. El <b>timer con voz</b> creemos que ya se puede usar sin problemas: lo probamos con la pantalla del teléfono apagada y, cuando el StickS3 se apagó solo y lo volvimos a prender, se reconectó sin tocar nada. El <b>contador de tiros</b> sigue en prueba: al 26 de noviembre de 2026 apenas empezamos a ajustarlo con disparos reales, al sonido del disparo y al retroceso del rifle.</div>
+  <p>El corazón del proyecto es el <b>M5StickS3</b> de M5Stack, una microcomputadora programable de 48 × 24 × 15 mm y 20 g con pantalla a color, micrófono, bocina, acelerómetro, batería y Bluetooth. M5Stack la diseñó para control remoto y proyectos de internet de las cosas (IoT), no para tiro; aun así, trae justo lo que necesitamos: oír el disparo, sentir el retroceso, mostrar el tiempo y avisarte en tus audífonos a través del teléfono.</p>
+  <p>Va montado en el riel del rifle y trabaja con una <b>app de Android</b>: el StickS3 lleva el tiempo de la etapa y cuenta tus tiros, y la app te dice cuánto te queda. El programa y la app son gratis y para compartir.</p>
   <h3>Por qué lo hicimos así</h3>
   <ul>
-    <li><b>Un solo aparato, sin soldar:</b> el StickS3 ya trae pantalla, micrófono, acelerómetro, batería y Bluetooth. Solo se le carga el programa desde la computadora.</li>
-    <li><b>La voz la pone tu teléfono:</b> el StickS3 manda avisos cortos por Bluetooth y la app los dice en los audífonos que ya usas para tirar. No cargas otra bocina ni otros audífonos.</li>
-    <li><b>Te olvidas del teléfono:</b> la app funciona con la pantalla apagada y está hecha para volver a conectarse sola en cada etapa.</li>
-    <li><b>Lo ajustas a tu gusto:</b> los segundos de cada aviso, las frases y los pitidos se pueden cambiar; el código es público.</li>
+    <li><b>Un solo aparato, sin soldar:</b> solo le cargas el programa desde la computadora.</li>
+    <li><b>La voz llega a tus audífonos de tiro:</b> el StickS3 manda avisos cortos por Bluetooth y el teléfono los convierte en voz. No cargas otra bocina.</li>
+    <li><b>App de Android:</b> sigue conectada aunque apagues la pantalla del teléfono. Para iPhone se necesitaría la cuenta de desarrollador de Apple, que cuesta 99 USD al año.</li>
+    <li><b>Un teléfono dedicado:</b> te sirve uno viejito y sin línea, con Android 8 o más (mejor 10 o más). Así no te entra una llamada en plena etapa y el timer no comparte teléfono con tu Kestrel ni con otros aparatos.</li>
+    <li><b>A tu gusto:</b> los segundos de cada aviso, las frases y los pitidos se pueden cambiar; el código es público.</li>
   </ul>
-  <p>La carcasa para montarlo en el riel la estamos haciendo en colaboración con otro compañero tirador. Les avisaremos cuando esté lista.</p>
+  <p>La carcasa para el riel la estamos haciendo junto con otro compañero del PRS. Les avisaremos cuando esté lista.</p>
+  <p><b>Dónde comprarlo:</b> <a href="https://www.amazon.com.mx/M5Stack-Official-M5StickS3-ESP32S3-desarrollo/dp/B0GWHN8HK3">Amazon México</a> (llega rápido) · <a href="https://www.mercadolibre.com.mx/m5stack-m5sticks3-esp32-s3-portable-iot-development-kit/p/MLM2092221610">Mercado Libre</a> · AliExpress (búscalo como “M5StickS3”; suele salir más barato, pero tarda más). Revisa que sea el <b>M5StickS3</b> (modelo K150). Las fotos oficiales están en la <a href="https://shop.m5stack.com/products/m5sticks3-esp32s3-mini-iot-dev-kit">página de M5Stack</a>.</p>
 
   <div class="indice no-impreso">
     <b>Contenido:</b>
@@ -109,13 +111,14 @@
     <tr><td>Computadora con <b>Chrome o Edge</b></td><td>Windows o Mac. Solo se usa una vez, para cargar el programa.</td></tr>
     <tr><td>Teléfono <b>Android</b></td><td>Android 8 o más (mejor 10 o más). Puede ser uno viejo y sin línea. <b>En iPhone no funciona.</b></td></tr>
     <tr><td>Audífonos u orejeras <b>Bluetooth</b></td><td>Los que ya usas para tirar, conectados a tu teléfono.</td></tr>
-    <tr><td>Montaje en el riel</td><td>Una carcasa que sujete el aparato firme al riel (sin gomas, para que sienta el golpe). La estamos haciendo con otro compañero tirador; les avisaremos cuando esté lista.</td></tr>
+    <tr><td>Montaje en el riel</td><td>Una carcasa que sujete el aparato firme al riel (sin gomas, para que sienta el golpe). La estamos haciendo con otro compañero del PRS; les avisaremos cuando esté lista.</td></tr>
   </table>
   <h3>Dónde comprarlo</h3>
   <ul>
-    <li><a href="https://www.amazon.com.mx/M5Stack-Official-M5StickS3-ESP32S3-desarrollo/dp/B0GWHN8HK3">Amazon México</a>: es la publicación de la que salió el primero que probamos (B0GWHN8HK3). Revisa precio y existencia antes de comprar.</li>
-    <li><a href="https://shop.m5stack.com/products/m5sticks3-esp32s3-mini-iot-dev-kit">Tienda oficial de M5Stack</a> (envío desde China).</li>
+    <li><a href="https://www.amazon.com.mx/M5Stack-Official-M5StickS3-ESP32S3-desarrollo/dp/B0GWHN8HK3">Amazon México</a>: es la publicación de la que salió el primero que probamos (B0GWHN8HK3). Llega rápido; revisa precio y existencia antes de comprar.</li>
     <li><a href="https://www.mercadolibre.com.mx/m5stack-m5sticks3-esp32-s3-portable-iot-development-kit/p/MLM2092221610">Mercado Libre</a>: publicación del M5StickS3 de M5Stack. Revisa precio, vendedor y que sea el <b>K150</b>.</li>
+    <li>AliExpress: búscalo como “M5StickS3” y revisa que sea el <b>K150</b>. Suele salir más barato, pero tarda más en llegar.</li>
+    <li>Fotos y ficha oficial: <a href="https://shop.m5stack.com/products/m5sticks3-esp32s3-mini-iot-dev-kit">página de M5Stack</a>.</li>
   </ul>
 
   <h2 id="programa">Paso 1: Cargar el programa al StickS3</h2>
@@ -230,12 +233,12 @@
     <tr><td><code>PRS_Timer_Voz_v3_32.bin</code></td><td>El programa ya compilado, en un solo archivo (va en la dirección 0x0). Es el mismo que carga el botón del Paso 1</td></tr>
     <tr><td><code>PRS_Timer_Voz_v3_32.ino</code></td><td>El mismo programa, en código (C++ de Arduino), para quien lo quiera cambiar</td></tr>
     <tr><td><code>PRS_Timer_Voz_App_v1_2.apk</code></td><td>La app de Android, versión 1.2</td></tr>
-    <tr><td><code>PRS_Timer_Voz_Instructivo_v4.pdf</code></td><td>Este instructivo en PDF</td></tr>
+    <tr><td><code>PRS_Timer_Voz_Instructivo_v5.pdf</code></td><td>Este instructivo en PDF</td></tr>
   </table>
   <ul>
     <li><a href="https://drive.google.com/drive/folders/1an5J0CpKaEJ-mXKpKTHvsj7ES79j6TT6">Carpeta en Google Drive</a> (solo para descargar)</li>
     <li><a href="https://github.com/vicentemack/timer-voz">Código en GitHub</a> (programa, app y páginas)</li>
-    <li>Dónde comprar el StickS3: <a href="https://www.amazon.com.mx/M5Stack-Official-M5StickS3-ESP32S3-desarrollo/dp/B0GWHN8HK3">Amazon México</a> · <a href="https://www.mercadolibre.com.mx/m5stack-m5sticks3-esp32-s3-portable-iot-development-kit/p/MLM2092221610">Mercado Libre</a> · <a href="https://shop.m5stack.com/products/m5sticks3-esp32s3-mini-iot-dev-kit">tienda oficial de M5Stack</a></li>
+    <li>Dónde comprar el StickS3: <a href="https://www.amazon.com.mx/M5Stack-Official-M5StickS3-ESP32S3-desarrollo/dp/B0GWHN8HK3">Amazon México</a> · <a href="https://www.mercadolibre.com.mx/m5stack-m5sticks3-esp32-s3-portable-iot-development-kit/p/MLM2092221610">Mercado Libre</a> · AliExpress (búscalo como “M5StickS3”)</li>
   </ul>
   <p class="nota">PRS Timer Voz · versión beta · 26 de noviembre de 2026</p>
 </main>
