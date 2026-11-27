@@ -1,6 +1,6 @@
 {
-  "name": "PRS MACK — voz del timer",
-  "short_name": "PRS MACK",
+  "name": "PRS Timer Voz",
+  "short_name": "Timer Voz",
   "description": "Voz del timer StickS3 en tus audífonos: listo, armado y cuánto tiempo te queda.",
   "lang": "es-MX",
   "start_url": "./",

@@ -1,5 +1,5 @@
 {
-  "name": "PRS MACK Timer",
+  "name": "PRS Timer Voz",
   "version": "3.32",
   "new_install_prompt_erase": true,
   "new_install_improv_wait_time": 0,
@@ -7,8 +7,8 @@
     {
       "chipFamily": "ESP32-S3",
       "parts": [
-        { "path": "PRS_MACK_Timer_v3_32_parte1.bin", "offset": 0 },
-        { "path": "PRS_MACK_Timer_v3_32_parte2.bin", "offset": 57344 }
+        { "path": "PRS_Timer_Voz_v3_32_parte1.bin", "offset": 0 },
+        { "path": "PRS_Timer_Voz_v3_32_parte2.bin", "offset": 57344 }
       ]
     }
   ]

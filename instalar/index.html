@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PRS MACK — Instructivo</title>
-<meta name="description" content="PRS MACK: timer y contador de tiros con voz en tus audífonos (M5StickS3 + app de Android). Cómo comprarlo, cargar el programa e instalar la app.">
+<title>PRS Timer Voz — Instructivo</title>
+<meta name="description" content="PRS Timer Voz: timer y contador de tiros con voz en tus audífonos (M5StickS3 + app de Android). Cómo comprarlo, cargar el programa e instalar la app.">
 <script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
 <style>
   :root { --bg:#ffffff; --fg:#15191f; --suave:#56606d; --linea:#d6dce4; --panel:#f3f5f8; --acento:#0b6e4f; --acento-fg:#ffffff; --aviso:#8a5a00; --aviso-bg:#fff6e0; }
@@ -41,6 +41,7 @@
   .nota { font-size: 14px; color: var(--suave); }
   .solo-impreso { display: none; }
   code { background: var(--panel); padding: 1px 5px; border-radius: 4px; }
+  td code { overflow-wrap: anywhere; }
   @media (max-width: 620px) { .dos { grid-template-columns: 1fr; } .dos img { max-width: 300px; } h1 { font-size: 30px; } }
   @media print {
     :root { --bg:#fff; --fg:#000; --suave:#444; --linea:#bbb; --panel:#f2f2f2; --acento:#0b6e4f; --acento-fg:#fff; }
@@ -53,7 +54,7 @@
 </head>
 <body>
 <main>
-  <h1>PRS MACK</h1>
+  <h1>PRS Timer Voz</h1>
   <p class="sub">Timer y contador de tiros que te dice el tiempo en tus audífonos. Para PRS22 y NRL22.</p>
   <p>Es un aparatito (el <b>M5StickS3</b>) que va en el riel del rifle, más una <b>app de Android</b>. El aparato lleva el tiempo de la etapa y cuenta tus tiros; la app te avisa en los audífonos cuánto te queda. Lo hizo Vicente Mack con ayuda de Claude, una inteligencia artificial. Es gratis y es para compartir.</p>
 
@@ -69,7 +70,7 @@
   </div>
 
   <div class="dos">
-    <img src="img/app-pantalla.png" alt="Ilustración de la app PRS MACK conectada al timer, con 58 segundos y 3 tiros">
+    <img src="img/app-pantalla.png" alt="Ilustración de la app PRS Timer Voz conectada al timer, con 58 segundos y 3 tiros">
     <div>
       <h3 style="margin-top:0">Qué hace</h3>
       <ul>
@@ -106,10 +107,10 @@
     <li>Conecta el StickS3 a la computadora con el cable USB-C.</li>
     <li><b>Si es nuevo</b> (trae el programa de fábrica), ponlo en <b>modo de carga</b>: mantén apretado el botón de encendido hasta que parpadee la luz verde y suéltalo. La pantalla se queda negra.</li>
     <li>Abre esta página (<b>vicentemack.github.io/timer-voz/instalar</b>) en <b>Chrome o Edge</b> en la computadora (no en el teléfono).</li>
-    <li>Pica el botón <b>Instalar PRS MACK en el StickS3</b> (aquí abajo). Chrome te pide escoger el aparato: escoge el puerto que aparece (por ejemplo “USB JTAG/serial debug unit” o un “COM”) y pica <b>Conectar</b>.</li>
-    <li>Sigue los botones (vienen en inglés): <b>Install PRS MACK Timer</b> → <b>Next</b> → <b>Install</b>.
+    <li>Pica el botón <b>Instalar PRS Timer Voz en el StickS3</b> (aquí abajo). Chrome te pide escoger el aparato: escoge el puerto que aparece (por ejemplo “USB JTAG/serial debug unit” o un “COM”) y pica <b>Conectar</b>.</li>
+    <li>Sigue los botones (vienen en inglés): <b>Install PRS Timer Voz</b> → <b>Next</b> → <b>Install</b>.
       <ul>
-        <li>En la pantalla <i>Erase device</i> hay una casilla para borrar el aparato: en uno <b>nuevo</b>, márcala; si ya traía PRS MACK y solo lo actualizas, déjala sin marcar para que conserve tus ajustes y tu registro de tiros.</li>
+        <li>En la pantalla <i>Erase device</i> hay una casilla para borrar el aparato: en uno <b>nuevo</b>, márcala; si ya traía este timer y solo lo actualizas, déjala sin marcar para que conserve tus ajustes y tu registro de tiros.</li>
       </ul>
     </li>
     <li>Espera a que diga <b>Installation complete!</b> (un par de minutos) y pica <b>Next</b>.</li>
@@ -118,7 +119,7 @@
   </ol>
   <div class="botones no-impreso">
     <esp-web-install-button manifest="manifest.json">
-      <button slot="activate">Instalar PRS MACK en el StickS3</button>
+      <button slot="activate">Instalar PRS Timer Voz en el StickS3</button>
       <span slot="unsupported"><b>Desde aquí no se puede instalar.</b> Abre esta página en Chrome o Edge en una computadora.</span>
       <span slot="not-allowed"><b>Abre la página con https.</b></span>
     </esp-web-install-button>
@@ -128,15 +129,15 @@
 
   <h2 id="app">Paso 2: Instalar la app en el teléfono Android</h2>
   <div class="botones no-impreso">
-    <a class="boton" href="https://github.com/vicentemack/timer-voz/releases/download/app-android/PRS_MACK_Timer_App.apk">Bajar la app PRS MACK</a>
-    <a class="boton sec" href="https://drive.google.com/drive/folders/1an5J0CpKaEJ-mXKpKTHvsj7ES79j6TT6">Carpeta con todos los archivos</a>
+    <a class="boton" href="https://github.com/vicentemack/timer-voz/releases/download/app-android/PRS_Timer_Voz_App.apk">Bajar la app PRS Timer Voz</a>
+    <a class="boton sec" href="https://drive.google.com/drive/folders/1Rv-y0PO0YQ4_2F4G2MhWHQClTZZhixwa">Carpeta con todos los archivos</a>
   </div>
-  <div class="caja solo-impreso">Para bajar la app, abre en el teléfono: <b>github.com/vicentemack/timer-voz/releases</b> (archivo PRS_MACK_Timer_App.apk)</div>
+  <div class="caja solo-impreso">Para bajar la app, abre en el teléfono: <b>github.com/vicentemack/timer-voz/releases</b> (archivo PRS_Timer_Voz_App.apk)</div>
   <ol>
-    <li>En el teléfono, abre el botón de arriba en <b>Chrome</b> y deja que se descargue el archivo <code>PRS_MACK_Timer_App.apk</code>.</li>
+    <li>En el teléfono, abre el botón de arriba en <b>Chrome</b> y deja que se descargue el archivo <code>PRS_Timer_Voz_App.apk</code>.</li>
     <li>Toca <b>Abrir</b>. Si pide permiso para instalar apps de Chrome: <b>Ajustes</b> → activa <b>Permitir de esta fuente</b> → regresa.</li>
     <li>Toca <b>Instalar</b>. Si Play Protect avisa que no conoce la app (porque no viene de la Play Store), puedes dejar que la analice o tocar <b>Más detalles → Instalar de todas formas</b>.</li>
-    <li>Abre <b>PRS MACK</b> y toca <b>Conectar con el timer</b>. Permite <b>Dispositivos cercanos</b> y las notificaciones.</li>
+    <li>Abre <b>PRS Timer Voz</b> y toca <b>Conectar con el timer</b>. Permite <b>Dispositivos cercanos</b> y las notificaciones.</li>
     <li>Toca <b>Quitar el ahorro de batería a esta app</b> y quítaselo, para que el teléfono no la cierre.</li>
     <li><b>La primera vez, prende solo tu timer.</b> La app se conecta, dice “conectado” y se queda con él: en <b>Tu timer</b> sale el mismo nombre que ves abajo en la pantalla del StickS3. En el StickS3 aparece un <b>punto azul</b>.</li>
   </ol>
@@ -209,16 +210,16 @@
   <h2 id="archivos">Archivos y código</h2>
   <table>
     <tr><th>Archivo</th><th>Qué es</th></tr>
-    <tr><td><code>PRS_MACK_Timer_v3_32.bin</code></td><td>El programa ya compilado, en un solo archivo (va en la dirección 0x0). Es el mismo que carga el botón del Paso 1</td></tr>
-    <tr><td><code>PRS_MACK_Timer_v3_32.ino</code></td><td>El mismo programa, en código (C++ de Arduino), para quien lo quiera cambiar</td></tr>
-    <tr><td><code>PRS_MACK_Timer_App_v1_1.apk</code></td><td>La app de Android, versión 1.1</td></tr>
-    <tr><td><code>PRS_MACK_Instructivo_v1.pdf</code></td><td>Este instructivo en PDF</td></tr>
+    <tr><td><code>PRS_Timer_Voz_v3_32.bin</code></td><td>El programa ya compilado, en un solo archivo (va en la dirección 0x0). Es el mismo que carga el botón del Paso 1</td></tr>
+    <tr><td><code>PRS_Timer_Voz_v3_32.ino</code></td><td>El mismo programa, en código (C++ de Arduino), para quien lo quiera cambiar</td></tr>
+    <tr><td><code>PRS_Timer_Voz_App_v1_2.apk</code></td><td>La app de Android, versión 1.2</td></tr>
+    <tr><td><code>PRS_Timer_Voz_Instructivo_v1.pdf</code></td><td>Este instructivo en PDF</td></tr>
   </table>
   <ul>
-    <li><a href="https://drive.google.com/drive/folders/1an5J0CpKaEJ-mXKpKTHvsj7ES79j6TT6">Carpeta PRS MACK en Google Drive</a> (solo para descargar)</li>
+    <li><a href="https://drive.google.com/drive/folders/1Rv-y0PO0YQ4_2F4G2MhWHQClTZZhixwa">Carpeta en Google Drive</a> (solo para descargar)</li>
     <li><a href="https://github.com/vicentemack/timer-voz">Código en GitHub</a> (programa, app y páginas)</li>
   </ul>
-  <p class="nota">PRS MACK · Vicente Mack · 26 de noviembre de 2026 · Hecho con Claude.</p>
+  <p class="nota">PRS Timer Voz · Vicente Mack · 26 de noviembre de 2026 · Hecho con Claude.</p>
 </main>
 </body>
 </html>
