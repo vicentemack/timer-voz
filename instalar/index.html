@@ -65,16 +65,15 @@
   <div class="aviso"><b>Versión beta, hecha por tiradores para tiradores.</b> La desarrollamos entre varios amigos apasionados del PRS en México, de los clubes ARCYT de Nuevo León y Saltillo Safari de Coahuila. Cada quien puso su granito de arena: experiencias en la estación, comentarios, qué nos funcionaba y qué no, y lo que nos gustaría que hiciera (y que no hiciera), dentro de lo que este aparato permite. ¡Gracias a todos los que ayudaron!<br><br>
   Todavía está por perfeccionarse. El <b>timer con voz</b> creemos que ya se puede usar sin problemas: lo probamos con la pantalla del teléfono apagada y, cuando el StickS3 se apagó solo y lo volvimos a prender, se reconectó sin tocar nada. Al 26 de noviembre de 2026, el <b>contador de tiros</b> sigue en prueba: lo vamos a probar con disparos reales el resto del año y a principios de 2027, para encontrar el ajuste de los sensores (el sonido del disparo y el retroceso del rifle) con el que funcione bien. El reto más difícil es el calibre .22; creemos que con alto poder será más sencillo.</div>
   <p>Para este timer y contador usamos el <b>M5StickS3</b> de M5Stack, una microcomputadora programable de 48 × 24 × 15 mm y 20 g con pantalla a color, micrófono, bocina, acelerómetro, batería y Bluetooth. M5Stack la diseñó para control remoto y proyectos de internet de las cosas (IoT), no para tiro; aun así, trae justo lo que necesitamos: oír el disparo, sentir el retroceso, mostrar el tiempo y avisarte en tus audífonos a través del teléfono.</p>
-  <p>Va montado en el riel del rifle y trabaja con una <b>app de Android</b>: el StickS3 lleva el tiempo de la etapa y cuenta tus tiros, y la app te dice cuánto te queda. El programa y la app son gratis y para compartir.</p>
-  <h3>Por qué lo hicimos así</h3>
+  <p>Trabaja con una <b>app de Android</b>: el StickS3 lleva el tiempo de la etapa y cuenta tus tiros, y la app te dice cuánto te queda. El programa y la app son gratis y para compartir.</p>
+  <h3>Cómo funciona</h3>
   <ul>
-    <li><b>Un solo aparato, sin soldar:</b> solo le cargas el programa desde la computadora.</li>
-    <li><b>La voz llega a tus audífonos de tiro:</b> el StickS3 manda avisos cortos por Bluetooth y el teléfono los convierte en voz. No cargas otra bocina.</li>
-    <li><b>App de Android:</b> sigue conectada aunque apagues la pantalla del teléfono. Para iPhone se necesitaría la cuenta de desarrollador de Apple, que cuesta 99 USD al año.</li>
+    <li><b>Un aparato probado:</b> escogimos uno de una familia con años en el mercado y buenas reseñas, porque en competencia importa más que no falle que la novedad. Solo le cargas el programa desde la computadora.</li>
+    <li><b>La voz llega a tus audífonos de tiro:</b> muchos compañeros prefieren oír el tiempo que verlo en la pantalla. Con audífonos de tiro con Bluetooth (hay varios), la app te lo va diciendo al oído; el StickS3 solo manda avisos cortos y el teléfono los convierte en voz.</li>
+    <li><b>App de Android:</b> ya está lista y funciona incluso con la pantalla del teléfono apagada. Para iPhone se necesitaría la cuenta de desarrollador de Apple, que cuesta 99 USD al año.</li>
     <li><b>Un teléfono dedicado:</b> te sirve uno viejito y sin línea, con Android 8 o más (mejor 10 o más). Así no te entra una llamada en plena etapa y el timer no comparte teléfono con tu Kestrel ni con otros aparatos.</li>
-    <li><b>A tu gusto:</b> los segundos de cada aviso, las frases y los pitidos se pueden cambiar; el código es público.</li>
+    <li><b>A tu gusto:</b> se personaliza según lo que cada quien quiera. A algunos les sirve más ver solo los colores verde, amarillo y rojo, sin números, porque los números los distraen. Otros prefieren no ver la pantalla y oír el tiempo en los segundos que elijan (por ejemplo, a los 60, 45 y 20) y la cuenta final de diez a uno. Todo eso se puede programar; el código es público.</li>
   </ul>
-  <p>La carcasa para el riel la estamos haciendo junto con otro compañero del PRS. Les avisaremos cuando esté lista.</p>
   <p><b>Dónde comprarlo:</b> <a href="https://www.amazon.com.mx/M5Stack-Official-M5StickS3-ESP32S3-desarrollo/dp/B0GWHN8HK3">Amazon México</a> (llega rápido) · <a href="https://www.mercadolibre.com.mx/m5stack-m5sticks3-esp32-s3-portable-iot-development-kit/p/MLM2092221610">Mercado Libre</a> · AliExpress (búscalo como “M5StickS3”; suele salir más barato, pero tarda más). Revisa que sea el <b>M5StickS3</b> (modelo K150). Las fotos oficiales están en la <a href="https://shop.m5stack.com/products/m5sticks3-esp32s3-mini-iot-dev-kit">página de M5Stack</a>.</p>
 
   <div class="indice no-impreso">
@@ -93,9 +92,9 @@
     <div>
       <h3 style="margin-top:0">Qué hace</h3>
       <ul>
-        <li><b>Cuenta tus tiros</b> (en prueba): uno cuenta solo si el micrófono oye el disparo y el aparato siente el golpe de tu rifle al mismo tiempo. El tiro del vecino no mueve tu rifle.</li>
+        <li><b>Cuenta tus tiros</b> (en prueba): cuenta un tiro válido cuando hay un sonido fuerte que sube de golpe, como un disparo y no como una plática, y además se siente el retroceso del rifle, los dos dentro de 50 milisegundos.</li>
         <li><b>Lleva el tiempo</b> de la etapa (105 o 120 s) con color en toda la pantalla: verde, amarillo y rojo.</li>
-        <li><b>Arranca solo</b> cuando bajas el rifle para acomodarlo en la estación.</li>
+        <li><b>Arranca solo:</b> esperas inmóvil, y cuando el RO da la salida y mueves el rifle hacia tu estación, empieza el tiempo.</li>
         <li><b>Te habla en los audífonos</b> por Bluetooth: “prepárate”, “armado”, 60, 45, 25 y la cuenta del 10 al 1.</li>
         <li><b>Se apaga solo</b> 30 segundos después de terminar la etapa, y la app se vuelve a conectar sola cuando lo prendes.</li>
       </ul>
@@ -111,7 +110,7 @@
     <tr><td>Computadora con <b>Chrome o Edge</b></td><td>Windows o Mac. Solo se usa una vez, para cargar el programa.</td></tr>
     <tr><td>Teléfono <b>Android</b></td><td>Android 8 o más (mejor 10 o más). Puede ser uno viejo y sin línea. <b>En iPhone no funciona.</b></td></tr>
     <tr><td>Audífonos u orejeras <b>Bluetooth</b></td><td>Los que ya usas para tirar, conectados a tu teléfono.</td></tr>
-    <tr><td>Montaje en el riel</td><td>Una carcasa que sujete el aparato firme al riel (sin gomas, para que sienta el golpe). La estamos haciendo con otro compañero del PRS; les avisaremos cuando esté lista.</td></tr>
+    <tr><td>Montaje en el rifle</td><td>Una carcasa que sujete el aparato firme al rifle (sin gomas, para que sienta el golpe).</td></tr>
   </table>
   <h3>Dónde comprarlo</h3>
   <ul>
@@ -168,7 +167,7 @@
     <li><b>Prende el StickS3</b> (un clic al botón de encendido) como parte de tu entrada a la estación. La app se conecta sola y dice “conectado”.</li>
     <li><b>Pica el botón azul:</b> suenan 3 bips y oyes <i>“Prepárate. Cinco segundos para que se arme el timer”</i>. Acomódate y quédate quieto.</li>
     <li>A los 5 s: 3 bips, números verdes y <i>“Armado. Ya puedes decirle listo al R. O.”</i></li>
-    <li>Cuando el RO da la señal, <b>baja el rifle</b> para acomodarlo: ese movimiento arranca el tiempo y oyes <b>6 pitidos cortos</b>.</li>
+    <li>Cuando el RO da la salida, <b>mueve el rifle</b> hacia tu estación: ese movimiento arranca el tiempo y oyes <b>6 pitidos cortos</b>.</li>
     <li>Te avisa <i>“sesenta”</i>, <i>“cuarenta y cinco”</i>, <i>“veinticinco”</i> y la cuenta <i>“diez, nueve… uno”</i>.</li>
     <li>En 0: <b>6 pitidos largos</b>. Ves tus tiros en la pantalla y <b>30 s después el StickS3 se apaga solo</b> (con el cable USB conectado no se apaga).</li>
     <li>Para la siguiente etapa, lo vuelves a prender y la app se conecta sola.</li>
@@ -219,7 +218,7 @@
   <h2 id="preguntas">Preguntas y avisos</h2>
   <div class="aviso"><b>Es una versión beta.</b> El timer con voz es lo que creemos que ya funciona bien; el <b>contador de tiros todavía no se ajusta con tiros reales</b> ni se ha usado en un match. Úsalo primero en entrenamientos.</div>
   <ul>
-    <li><b>¿Lo puedo usar en un match?</b> El tiempo oficial es el del RO. El StickS3 es solo una referencia para ti, y arranca cuando bajas el rifle, un poco después de la señal del RO. Pregunta al director de match antes de usarlo.</li>
+    <li><b>¿Lo puedo usar en un match?</b> El tiempo oficial es el del RO. El StickS3 es solo una referencia para ti, y arranca cuando mueves el rifle, un poco después de la salida del RO. Pregunta al director de match antes de usarlo.</li>
     <li><b>¿Se pelea con mi Kestrel o mi app de balística?</b> No se ha probado todo junto en el mismo teléfono. Haz una etapa de prueba con todo conectado; si hay cortes, usa un teléfono para el timer y otro para la balística.</li>
     <li><b>¿Y si somos varios en la escuadra?</b> Cada timer tiene su nombre y cada app se queda con el suyo. La primera conexión hazla con solo tu timer prendido.</li>
     <li><b>¿Cuánto dura la batería del StickS3?</b> Con la pantalla prendida todo el tiempo duró 1 h 45 min (sin Bluetooth). Como se apaga solo después de cada etapa, en un match se usa mucho menos.</li>
@@ -233,7 +232,7 @@
     <tr><td><code>PRS_Timer_Voz_v3_32.bin</code></td><td>El programa ya compilado, en un solo archivo (va en la dirección 0x0). Es el mismo que carga el botón del Paso 1</td></tr>
     <tr><td><code>PRS_Timer_Voz_v3_32.ino</code></td><td>El mismo programa, en código (C++ de Arduino), para quien lo quiera cambiar</td></tr>
     <tr><td><code>PRS_Timer_Voz_App_v1_2.apk</code></td><td>La app de Android, versión 1.2</td></tr>
-    <tr><td><code>PRS_Timer_Voz_Instructivo_v8.pdf</code></td><td>Este instructivo en PDF</td></tr>
+    <tr><td><code>PRS_Timer_Voz_Instructivo_v9.pdf</code></td><td>Este instructivo en PDF</td></tr>
   </table>
   <ul>
     <li><a href="https://drive.google.com/drive/folders/1an5J0CpKaEJ-mXKpKTHvsj7ES79j6TT6">Carpeta en Google Drive</a> (solo para descargar)</li>
