@@ -45,6 +45,11 @@
   .qr { display: flex; align-items: center; gap: 14px; margin: 14px 0; break-inside: avoid; }
   .qr img { width: 140px; height: 140px; flex: none; background: #fff; padding: 4px; border: 1px solid var(--linea); border-radius: 8px; }
   .qr p { margin: 0; }
+  .fotos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 14px 0; }
+  .fotos figure img, .foto-ancha img { max-width: 100%; border-radius: 10px; display: block; margin: 0 auto; }
+  .foto-ancha { margin: 14px 0; }
+  .foto-ancha img { width: 100%; max-width: 560px; }
+  @media (max-width: 560px) { .fotos { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 620px) { .dos { grid-template-columns: 1fr; } .dos img { max-width: 300px; } h1 { font-size: 30px; } }
   @media print {
     :root { --bg:#fff; --fg:#000; --suave:#444; --linea:#bbb; --panel:#f2f2f2; --acento:#0b6e4f; --acento-fg:#fff; }
@@ -54,6 +59,8 @@
     main { padding-top: 0; }
     .dos { display: flex; flex-direction: column-reverse; break-inside: auto; gap: 6px; }
     .dos img { width: 125px; margin: 0 auto; }
+    .foto-ancha img { max-width: 260px; }
+    .fotos { gap: 8px; } .fotos figure img { max-width: 145px; }
     h2 { margin-top: 24px; }
     table { break-inside: auto; } tr { break-inside: avoid; }
     .pantallas { grid-template-columns: repeat(7, 1fr); gap: 8px; }
@@ -160,14 +167,23 @@
     <p><b>O escanea este código</b> con la cámara de tu teléfono Android: te lleva directo a la app.</p>
   </div>
   <ol>
-    <li>En el teléfono, abre el botón de arriba en <b>Chrome</b> (o escanea el código QR) y deja que se descargue el archivo <code>PRS_Timer_Voz_App.apk</code>.</li>
-    <li>Toca <b>Abrir</b>. Si pide permiso para instalar apps de Chrome: <b>Ajustes</b> → activa <b>Permitir de esta fuente</b> → regresa.</li>
+    <li>En el teléfono, abre el botón de arriba en <b>Chrome</b> (o escanea el código QR). Chrome te va a avisar <b>“Es posible que el archivo sea dañino”</b>: toca <b>Descargar de todos modos</b> (pasa con cualquier app que no viene de la Play Store).</li>
+    <li>Abre el archivo <code>PRS_Timer_Voz_App.apk</code> desde el aviso de descarga o desde <b>Descargas</b>; si hay varias copias, abre la más reciente. Si pide permiso para instalar apps de Chrome: <b>Ajustes</b> → activa <b>Permitir de esta fuente</b> → regresa.</li>
     <li>Toca <b>Instalar</b>. Si Play Protect avisa que no conoce la app (porque no viene de la Play Store), puedes dejar que la analice o tocar <b>Más detalles → Instalar de todas formas</b>.</li>
     <li>Abre <b>PRS Timer Voz</b> y toca <b>Conectar con el timer</b>. Permite <b>Dispositivos cercanos</b> y las notificaciones.</li>
     <li>Toca <b>Quitar el ahorro de batería a esta app</b> y quítaselo, para que el teléfono no la cierre.</li>
     <li><b>La primera vez, prende solo tu timer.</b> La app se conecta, dice “conectado” y se queda con él: en <b>Tu timer</b> sale el mismo nombre que ves abajo en la pantalla del StickS3. En el StickS3 aparece un <b>punto azul</b>.</li>
   </ol>
   <p class="nota">Si un día quieres usar otro timer, toca <b>Cambiar de timer</b> con solo ese timer prendido.</p>
+  <h3>Así se ve (fotos de una instalación real)</h3>
+  <div class="fotos">
+    <figure><img src="img/app-paso-1.jpg" alt="La cámara lee el QR y muestra la liga de github.com"><figcaption><b>1.</b> La cámara lee el QR: toca la liga de github.com.</figcaption></figure>
+    <figure><img src="img/app-paso-2.jpg" alt="Chrome avisa que el archivo podría ser dañino"><figcaption><b>2.</b> Chrome avisa que el archivo podría ser dañino: toca <b>Descargar de todos modos</b>.</figcaption></figure>
+    <figure><img src="img/app-paso-3.jpg" alt="¿Quieres instalar esta app? PRS Timer Voz"><figcaption><b>3.</b> Abre el archivo y toca <b>Instalar</b>.</figcaption></figure>
+    <figure><img src="img/app-paso-4.jpg" alt="App instalada"><figcaption><b>4.</b> App instalada: toca <b>Listo</b> y abre PRS Timer Voz.</figcaption></figure>
+    <figure><img src="img/app-paso-5.jpg" alt="Permiso para encontrar dispositivos cercanos"><figcaption><b>5.</b> Permite <b>Dispositivos cercanos</b> y luego las notificaciones.</figcaption></figure>
+    <figure><img src="img/app-paso-6.jpg" alt="La app conectada al timer"><figcaption><b>6.</b> Prende tu StickS3: la app se conecta sola y dice “conectado”.</figcaption></figure>
+  </div>
 
   <h2 id="uso">Cómo se usa en la estación</h2>
   <ol>
@@ -221,6 +237,7 @@
     <li><b>Mantener despiertos los audífonos:</b> déjalo activado para que no se coman la primera sílaba.</li>
     <li><b>Avisos recibidos:</b> lo último que mandó el timer, con la hora.</li>
   </ul>
+  <figure class="foto-ancha"><img src="img/app-pantalla-apagada.jpg" alt="El StickS3 en 60 junto al teléfono con la pantalla apagada"><figcaption>Probado con la pantalla del teléfono apagada: el StickS3 va en 60 y el teléfono dice “sesenta”.</figcaption></figure>
 
   <h2 id="preguntas">Preguntas y avisos</h2>
   <div class="aviso"><b>Es una versión beta.</b> El timer con voz es lo que creemos que ya funciona bien; el <b>contador de tiros todavía no se ajusta con tiros reales</b> ni se ha usado en un match. Úsalo primero en entrenamientos.</div>
@@ -239,7 +256,7 @@
     <tr><td><code>PRS_Timer_Voz_v3_32.bin</code></td><td>El programa ya compilado, en un solo archivo (va en la dirección 0x0). Es el mismo que carga el botón del Paso 1</td></tr>
     <tr><td><code>PRS_Timer_Voz_v3_32.ino</code></td><td>El mismo programa, en código (C++ de Arduino), para quien lo quiera cambiar</td></tr>
     <tr><td><code>PRS_Timer_Voz_App_v1_2.apk</code></td><td>La app de Android, versión 1.2</td></tr>
-    <tr><td><code>PRS_Timer_Voz_Instructivo_v10.pdf</code></td><td>Este instructivo en PDF</td></tr>
+    <tr><td><code>PRS_Timer_Voz_Instructivo_v11.pdf</code></td><td>Este instructivo en PDF</td></tr>
   </table>
   <ul>
     <li><a href="https://drive.google.com/drive/folders/1an5J0CpKaEJ-mXKpKTHvsj7ES79j6TT6">Carpeta en Google Drive</a> (solo para descargar)</li>
