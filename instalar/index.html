@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PRS MACK — Instructivo</title>
+<meta name="description" content="PRS MACK: timer y contador de tiros con voz en tus audífonos (M5StickS3 + app de Android). Cómo comprarlo, cargar el programa e instalar la app.">
+<script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
+<style>
+  :root { --bg:#ffffff; --fg:#15191f; --suave:#56606d; --linea:#d6dce4; --panel:#f3f5f8; --acento:#0b6e4f; --acento-fg:#ffffff; --aviso:#8a5a00; --aviso-bg:#fff6e0; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0f1317; --fg:#e9edf2; --suave:#a3adba; --linea:#2b333d; --panel:#171d24; --acento:#3fbf8f; --acento-fg:#0f1317; --aviso:#ffcf70; --aviso-bg:#2a2210; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 860px; margin: 0 auto; padding: 20px 16px 48px; }
+  h1 { font-size: 34px; margin: 6px 0 2px; letter-spacing: .5px; }
+  h2 { font-size: 23px; margin: 34px 0 8px; padding-top: 8px; border-top: 1px solid var(--linea); }
+  h3 { font-size: 18px; margin: 20px 0 6px; }
+  p { margin: 8px 0; }
+  .sub { color: var(--suave); font-size: 18px; margin: 0 0 10px; }
+  a { color: var(--acento); }
+  ol, ul { padding-left: 22px; } li { margin: 4px 0; }
+  table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 15px; }
+  th, td { border: 1px solid var(--linea); padding: 7px 9px; text-align: left; vertical-align: top; }
+  th { background: var(--panel); }
+  .indice { background: var(--panel); border-radius: 10px; padding: 10px 14px; margin: 14px 0; }
+  .indice a { margin-right: 12px; white-space: nowrap; }
+  .caja { background: var(--panel); border: 1px solid var(--linea); border-radius: 12px; padding: 14px 16px; margin: 14px 0; }
+  .aviso { background: var(--aviso-bg); border: 1px solid var(--aviso); border-radius: 12px; padding: 12px 16px; margin: 14px 0; }
+  .aviso b { color: var(--aviso); }
+  .boton, esp-web-install-button button { display: inline-block; background: var(--acento); color: var(--acento-fg); border: 0; border-radius: 10px; padding: 13px 20px; font-size: 17px; font-weight: 700; text-decoration: none; cursor: pointer; }
+  .boton.sec { background: transparent; color: var(--acento); border: 2px solid var(--acento); }
+  .botones { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
+  .pantallas { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 14px; margin: 14px 0; }
+  figure { margin: 0; text-align: center; break-inside: avoid; }
+  figure img { width: 100%; max-width: 150px; height: auto; }
+  figcaption { font-size: 13px; color: var(--suave); margin-top: 4px; line-height: 1.35; }
+  .dos { display: grid; grid-template-columns: minmax(0, 260px) 1fr; gap: 18px; align-items: start; }
+  .dos img { width: 100%; border-radius: 18px; border: 1px solid var(--linea); }
+  .nota { font-size: 14px; color: var(--suave); }
+  .solo-impreso { display: none; }
+  code { background: var(--panel); padding: 1px 5px; border-radius: 4px; }
+  @media (max-width: 620px) { .dos { grid-template-columns: 1fr; } .dos img { max-width: 300px; } h1 { font-size: 30px; } }
+  @media print {
+    :root { --bg:#fff; --fg:#000; --suave:#444; --linea:#bbb; --panel:#f2f2f2; --acento:#0b6e4f; --acento-fg:#fff; }
+    .no-impreso, esp-web-install-button { display: none !important; }
+    .solo-impreso { display: block; }
+    h2, h3 { break-after: avoid; } table, .caja, .aviso, .dos { break-inside: avoid; }
+    main { padding-top: 0; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>PRS MACK</h1>
+  <p class="sub">Timer y contador de tiros que te dice el tiempo en tus audífonos. Para PRS22 y NRL22.</p>
+  <p>Es un aparatito (el <b>M5StickS3</b>) que va en el riel del rifle, más una <b>app de Android</b>. El aparato lleva el tiempo de la etapa y cuenta tus tiros; la app te avisa en los audífonos cuánto te queda. Lo hizo Vicente Mack con ayuda de Claude, una inteligencia artificial. Es gratis y es para compartir.</p>
+
+  <div class="indice no-impreso">
+    <b>Contenido:</b>
+    <a href="#necesitas">Qué necesitas</a>
+    <a href="#programa">1. Cargar el programa</a>
+    <a href="#app">2. Instalar la app</a>
+    <a href="#uso">Cómo se usa</a>
+    <a href="#pantallas">Pantallas</a>
+    <a href="#preguntas">Preguntas</a>
+    <a href="#archivos">Archivos</a>
+  </div>
+
+  <div class="dos">
+    <img src="img/app-pantalla.png" alt="Ilustración de la app PRS MACK conectada al timer, con 58 segundos y 3 tiros">
+    <div>
+      <h3 style="margin-top:0">Qué hace</h3>
+      <ul>
+        <li><b>Cuenta tus tiros:</b> uno cuenta solo si el micrófono oye el disparo y el aparato siente el golpe de tu rifle al mismo tiempo. El tiro del vecino no mueve tu rifle.</li>
+        <li><b>Lleva el tiempo</b> de la etapa (105 o 120 s) con color en toda la pantalla: verde, amarillo y rojo.</li>
+        <li><b>Arranca solo</b> cuando bajas el rifle para acomodarlo en la estación.</li>
+        <li><b>Te habla en los audífonos</b> por Bluetooth: “prepárate”, “armado”, 60, 45, 25 y la cuenta del 10 al 1.</li>
+        <li><b>Se apaga solo</b> 30 segundos después de terminar la etapa, y la app se vuelve a conectar sola cuando lo prendes.</li>
+      </ul>
+      <p class="nota">La imagen de la app es una ilustración; en tu teléfono se ve parecida.</p>
+    </div>
+  </div>
+
+  <h2 id="necesitas">Qué necesitas</h2>
+  <table>
+    <tr><th>Qué</th><th>Detalle</th></tr>
+    <tr><td><b>M5StickS3</b> (modelo <b>K150</b>)</td><td>De M5Stack. Revisa que diga <b>StickS3</b> y <b>K150</b>: otros modelos parecidos (como el StickC Plus2) no sirven con este programa.</td></tr>
+    <tr><td>Cable USB-C <b>de datos</b></td><td>Para cargar el programa desde la computadora. Algunos cables solo cargan: si la computadora no ve el aparato, prueba otro.</td></tr>
+    <tr><td>Computadora con <b>Chrome o Edge</b></td><td>Windows o Mac. Solo se usa una vez, para cargar el programa.</td></tr>
+    <tr><td>Teléfono <b>Android</b></td><td>Android 8 o más (mejor 10 o más). Puede ser uno viejo y sin línea. <b>En iPhone no funciona.</b></td></tr>
+    <tr><td>Audífonos u orejeras <b>Bluetooth</b></td><td>Los que ya usas con tu teléfono.</td></tr>
+    <tr><td>Montaje en el riel</td><td>Una carcasa impresa en 3D que sujete el aparato firme al riel (sin gomas, para que sienta el golpe).</td></tr>
+  </table>
+  <h3>Dónde comprarlo</h3>
+  <ul>
+    <li><a href="https://www.amazon.com.mx/M5Stack-Official-M5StickS3-ESP32S3-desarrollo/dp/B0GWHN8HK3">Amazon México</a>: es la misma publicación del de Vicente (B0GWHN8HK3). Revisa precio y existencia antes de comprar.</li>
+    <li><a href="https://shop.m5stack.com/products/m5sticks3-esp32s3-mini-iot-dev-kit">Tienda oficial de M5Stack</a> (envío desde China).</li>
+    <li>Mercado Libre o AliExpress: búscalo como “M5StickS3” y revisa que sea el <b>K150</b>.</li>
+  </ul>
+
+  <h2 id="programa">Paso 1: Cargar el programa al StickS3</h2>
+  <p>Se hace una sola vez, desde la computadora y sin instalar nada: esta misma página lo carga.</p>
+  <ol>
+    <li>Conecta el StickS3 a la computadora con el cable USB-C.</li>
+    <li><b>Si es nuevo</b> (trae el programa de fábrica), ponlo en <b>modo de carga</b>: mantén apretado el botón de encendido hasta que parpadee la luz verde y suéltalo. La pantalla se queda negra.</li>
+    <li>Abre esta página (<b>vicentemack.github.io/timer-voz/instalar</b>) en <b>Chrome o Edge</b> en la computadora (no en el teléfono).</li>
+    <li>Pica el botón <b>Instalar PRS MACK en el StickS3</b> (aquí abajo). Chrome te pide escoger el aparato: escoge el puerto que aparece (por ejemplo “USB JTAG/serial debug unit” o un “COM”) y pica <b>Conectar</b>.</li>
+    <li>Sigue los botones (vienen en inglés): <b>Install PRS MACK Timer</b> → <b>Next</b> → <b>Install</b>.
+      <ul>
+        <li>En la pantalla <i>Erase device</i> hay una casilla para borrar el aparato: en uno <b>nuevo</b>, márcala; si ya traía PRS MACK y solo lo actualizas, déjala sin marcar para que conserve tus ajustes y tu registro de tiros.</li>
+      </ul>
+    </li>
+    <li>Espera a que diga <b>Installation complete!</b> (un par de minutos) y pica <b>Next</b>.</li>
+    <li>Si la pantalla del StickS3 se queda negra, dale <b>doble clic</b> al botón de encendido para apagarlo y <b>un clic</b> para prenderlo. Debe mostrar <b>0</b> arriba y <b>105</b> abajo, en blanco.</li>
+    <li>Abajo, en gris, sale el <b>nombre de tu timer</b> (por ejemplo <code>TimerS3-7C2A</code>). Cada aparato tiene el suyo.</li>
+  </ol>
+  <div class="botones no-impreso">
+    <esp-web-install-button manifest="manifest.json">
+      <button slot="activate">Instalar PRS MACK en el StickS3</button>
+      <span slot="unsupported"><b>Desde aquí no se puede instalar.</b> Abre esta página en Chrome o Edge en una computadora.</span>
+      <span slot="not-allowed"><b>Abre la página con https.</b></span>
+    </esp-web-install-button>
+  </div>
+  <div class="caja solo-impreso">Para cargar el programa, abre en Chrome o Edge en la computadora: <b>vicentemack.github.io/timer-voz/instalar</b></div>
+  <div class="aviso"><b>Si no se conecta o marca error:</b> revisa que el cable sea de datos, ponlo en modo de carga (paso 2) y vuelve a picar el botón.</div>
+
+  <h2 id="app">Paso 2: Instalar la app en el teléfono Android</h2>
+  <div class="botones no-impreso">
+    <a class="boton" href="https://github.com/vicentemack/timer-voz/releases/download/app-android/PRS_MACK_Timer_App.apk">Bajar la app PRS MACK</a>
+    <a class="boton sec" href="https://drive.google.com/drive/folders/1an5J0CpKaEJ-mXKpKTHvsj7ES79j6TT6">Carpeta con todos los archivos</a>
+  </div>
+  <div class="caja solo-impreso">Para bajar la app, abre en el teléfono: <b>github.com/vicentemack/timer-voz/releases</b> (archivo PRS_MACK_Timer_App.apk)</div>
+  <ol>
+    <li>En el teléfono, abre el botón de arriba en <b>Chrome</b> y deja que se descargue el archivo <code>PRS_MACK_Timer_App.apk</code>.</li>
+    <li>Toca <b>Abrir</b>. Si pide permiso para instalar apps de Chrome: <b>Ajustes</b> → activa <b>Permitir de esta fuente</b> → regresa.</li>
+    <li>Toca <b>Instalar</b>. Si Play Protect avisa que no conoce la app (porque no viene de la Play Store), puedes dejar que la analice o tocar <b>Más detalles → Instalar de todas formas</b>.</li>
+    <li>Abre <b>PRS MACK</b> y toca <b>Conectar con el timer</b>. Permite <b>Dispositivos cercanos</b> y las notificaciones.</li>
+    <li>Toca <b>Quitar el ahorro de batería a esta app</b> y quítaselo, para que el teléfono no la cierre.</li>
+    <li><b>La primera vez, prende solo tu timer.</b> La app se conecta, dice “conectado” y se queda con él: en <b>Tu timer</b> sale el mismo nombre que ves abajo en la pantalla del StickS3. En el StickS3 aparece un <b>punto azul</b>.</li>
+  </ol>
+  <p class="nota">Si un día quieres usar otro timer, toca <b>Cambiar de timer</b> con solo ese timer prendido.</p>
+
+  <h2 id="uso">Cómo se usa en la estación</h2>
+  <ol>
+    <li><b>Prende el StickS3</b> (un clic al botón de encendido) como parte de tu entrada a la estación. La app se conecta sola y dice “conectado”.</li>
+    <li><b>Pica el botón azul:</b> suenan 3 bips y oyes <i>“Prepárate. Cinco segundos para que se arme el timer”</i>. Acomódate y quédate quieto.</li>
+    <li>A los 5 s: 3 bips, números verdes y <i>“Armado. Ya puedes decirle listo al R. O.”</i></li>
+    <li>Cuando el RO da la señal, <b>baja el rifle</b> para acomodarlo: ese movimiento arranca el tiempo y oyes <b>6 pitidos cortos</b>.</li>
+    <li>Te avisa <i>“sesenta”</i>, <i>“cuarenta y cinco”</i>, <i>“veinticinco”</i> y la cuenta <i>“diez, nueve… uno”</i>.</li>
+    <li>En 0: <b>6 pitidos largos</b>. Ves tus tiros en la pantalla y <b>30 s después el StickS3 se apaga solo</b> (con el cable USB conectado no se apaga).</li>
+    <li>Para la siguiente etapa, lo vuelves a prender y la app se conecta sola.</li>
+  </ol>
+  <table>
+    <tr><th>Momento</th><th>Qué oyes en los audífonos</th></tr>
+    <tr><td>Al conectarse</td><td>“conectado”</td></tr>
+    <tr><td>Al picar el azul</td><td>“Prepárate. Cinco segundos para que se arme el timer”</td></tr>
+    <tr><td>A los 5 s</td><td>“Armado. Ya puedes decirle listo al R. O.”</td></tr>
+    <tr><td>Al arrancar el tiempo</td><td>6 pitidos cortos</td></tr>
+    <tr><td>Quedan 60, 45 y 25 s</td><td>“sesenta”, “cuarenta y cinco”, “veinticinco”</td></tr>
+    <tr><td>Últimos 10 s</td><td>“diez, nueve, ocho… uno”</td></tr>
+    <tr><td>En 0</td><td>6 pitidos largos</td></tr>
+  </table>
+  <div class="caja"><b>La app funciona con la pantalla del teléfono apagada</b> y con el teléfono en la bolsa. No necesita internet. Toca <b>Probar voz y pitidos</b> para oír todo antes de tirar.</div>
+
+  <h3>Botones del StickS3</h3>
+  <table>
+    <tr><th>Botón</th><th>Qué hace</th></tr>
+    <tr><td>Azul (al frente)</td><td>Un clic: arma el timer (o lo arranca a mano si ya está armado). Apretado 1.5 s: lo regresa al inicio. En 0, un clic regresa al inicio.</td></tr>
+    <tr><td>Lateral</td><td>Un clic: pasa a la pantalla de prueba (para calibrar) y de regreso. En la pantalla de prueba, el azul apretado 1.5 s cambia la etapa entre 105 y 120 s; se queda guardado.</td></tr>
+    <tr><td>Encendido</td><td>Un clic: lo prende (o lo reinicia si está prendido). Doble clic: lo apaga.</td></tr>
+  </table>
+
+  <h2 id="pantallas">Pantallas del StickS3</h2>
+  <p>Arriba van tus tiros y abajo los segundos que quedan. El color cubre toda la pantalla. Del tiro 11 en adelante el número parpadea, porque ya no valen.</p>
+  <div class="pantallas">
+    <figure><img src="img/stick-listo.png" alt="Listo: 0 tiros, 105 s, nombre del timer y punto azul"><figcaption><b>Listo.</b> Abajo, su nombre; el punto azul es el teléfono conectado</figcaption></figure>
+    <figure><img src="img/stick-espera.png" alt="Espera de 5 segundos"><figcaption><b>Espera 5 a 1.</b> Acomódate</figcaption></figure>
+    <figure><img src="img/stick-armado.png" alt="Armado en verde"><figcaption><b>Armado.</b> Arranca al mover el rifle</figcaption></figure>
+    <figure><img src="img/stick-verde.png" alt="Verde los primeros 60 segundos"><figcaption><b>Verde:</b> primeros 60 s</figcaption></figure>
+    <figure><img src="img/stick-amarillo.png" alt="Amarillo hasta que quedan 15 segundos"><figcaption><b>Amarillo:</b> hasta que quedan 15 s (parpadea)</figcaption></figure>
+    <figure><img src="img/stick-rojo.png" alt="Rojo los ultimos 15 segundos"><figcaption><b>Rojo:</b> últimos 15 s (parpadea)</figcaption></figure>
+    <figure><img src="img/stick-fin.png" alt="Fin en 0"><figcaption><b>En 0.</b> Se apaga 30 s después</figcaption></figure>
+  </div>
+  <p class="nota">Los dibujos son aproximados; el nombre <code>TimerS3-7C2A</code> es un ejemplo. Desde el minuto, en amarillo y rojo, los colores se invierten cada medio segundo.</p>
+
+  <h3>La app</h3>
+  <ul>
+    <li><b>Arriba:</b> si está conectada, en qué va el timer, los segundos, tus tiros y la batería del StickS3.</li>
+    <li><b>Conectar / Detener:</b> prende o apaga la app. Prendida, busca tu timer sola todo el tiempo.</li>
+    <li><b>Probar voz y pitidos:</b> dice todos los avisos para que revises tus audífonos.</li>
+    <li><b>Tu timer / Cambiar de timer:</b> el timer con el que se quedó la app.</li>
+    <li><b>Mantener despiertos los audífonos:</b> déjalo activado para que no se coman la primera sílaba.</li>
+    <li><b>Avisos recibidos:</b> lo último que mandó el timer, con la hora.</li>
+  </ul>
+
+  <h2 id="preguntas">Preguntas y avisos</h2>
+  <div class="aviso"><b>Es un prototipo.</b> Funciona en casa; <b>todavía no se prueba con tiros reales</b> ni en un match. Úsalo primero en entrenamientos.</div>
+  <ul>
+    <li><b>¿Lo puedo usar en un match?</b> El tiempo oficial es el del RO. El StickS3 es solo una referencia para ti, y arranca cuando bajas el rifle, un poco después de la señal del RO. Pregunta al director de match antes de usarlo.</li>
+    <li><b>¿Se pelea con mi Kestrel o mi app de balística?</b> No se ha probado todo junto en el mismo teléfono. Haz una etapa de prueba con todo conectado; si hay cortes, usa un teléfono para el timer y otro para la balística.</li>
+    <li><b>¿Y si somos varios en la escuadra?</b> Cada timer tiene su nombre y cada app se queda con el suyo. La primera conexión hazla con solo tu timer prendido.</li>
+    <li><b>¿Cuánto dura la batería del StickS3?</b> Con la pantalla prendida todo el tiempo duró 1 h 45 min (sin Bluetooth). Como se apaga solo después de cada etapa, en un match se usa mucho menos.</li>
+    <li><b>¿iPhone?</b> No: la app es solo para Android.</li>
+    <li><b>¿Puedo cambiar las frases o los segundos?</b> Sí. El código es público (abajo). Con Claude u otra IA le puedes pedir, con tus palabras, que avise a los 65 s o que diga otra frase.</li>
+  </ul>
+
+  <h2 id="archivos">Archivos y código</h2>
+  <table>
+    <tr><th>Archivo</th><th>Qué es</th></tr>
+    <tr><td><code>PRS_MACK_Timer_v3_32.bin</code></td><td>El programa listo para cargar (lo carga el botón del Paso 1)</td></tr>
+    <tr><td><code>PRS_MACK_Timer_v3_32.ino</code></td><td>El mismo programa, en código (C++ de Arduino), para quien lo quiera cambiar</td></tr>
+    <tr><td><code>PRS_MACK_Timer_App_v1_1.apk</code></td><td>La app de Android, versión 1.1</td></tr>
+    <tr><td><code>PRS_MACK_Instructivo_v1.pdf</code></td><td>Este instructivo en PDF</td></tr>
+  </table>
+  <ul>
+    <li><a href="https://drive.google.com/drive/folders/1an5J0CpKaEJ-mXKpKTHvsj7ES79j6TT6">Carpeta PRS MACK en Google Drive</a> (solo para descargar)</li>
+    <li><a href="https://github.com/vicentemack/timer-voz">Código en GitHub</a> (programa, app y páginas)</li>
+  </ul>
+  <p class="nota">PRS MACK · Vicente Mack · 26 de noviembre de 2026 · Hecho con Claude.</p>
+</main>
+</body>
+</html>
