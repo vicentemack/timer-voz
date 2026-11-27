@@ -1,0 +1,86 @@
+name: Programa del timer
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'firmware/**'
+      - '.github/workflows/firmware.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  compilar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: arduino/setup-arduino-cli@v2
+
+      - name: Placas M5Stack y librerias
+        run: |
+          set -o pipefail
+          {
+            arduino-cli config init --overwrite
+            arduino-cli config add board_manager.additional_urls https://static-cdn.m5stack.com/resource/arduino/package_m5stack_index.json
+            arduino-cli core update-index
+            arduino-cli core install m5stack:esp32@3.3.10 || arduino-cli core install m5stack:esp32
+            arduino-cli lib update-index
+            arduino-cli lib install "M5Unified@0.3.0" "M5GFX@0.3.0" "M5PM1@1.0.7"
+            arduino-cli core list
+            arduino-cli lib list
+          } 2>&1 | tee preparar.log
+
+      - name: Placa y opciones (como en la laptop de Vicente)
+        run: |
+          set -o pipefail
+          FQBN=$(arduino-cli board listall --format json | python3 -c "
+          import sys, json
+          d = json.load(sys.stdin)
+          b = [x['fqbn'] for x in d.get('boards', []) if 'sticks3' in x['fqbn'].lower() or 'StickS3' in x.get('name', '')]
+          print(b[0] if b else '')")
+          echo "placa: $FQBN" | tee placa.log
+          arduino-cli board details -b "$FQBN" 2>&1 | tee -a placa.log
+          OPCIONES=$(arduino-cli board details -b "$FQBN" --format json | python3 -c "
+          import sys, json
+          d = json.load(sys.stdin)
+          d = d.get('board', d)
+          quiero = {'USB CDC On Boot': 'Enabled', 'Flash Size': '8MB', 'Partition Scheme': '8M with spiffs (3MB APP/1.5MB SPIFFS)'}
+          sal = []
+          for o in d.get('config_options', []):
+              et = o.get('option_label', '')
+              for clave, valor in quiero.items():
+                  if et.startswith(clave):
+                      for v in o.get('values', []):
+                          if v.get('value_label', '').startswith(valor):
+                              sal.append(o['option'] + '=' + v['value'])
+          print(','.join(sal))")
+          echo "opciones: $OPCIONES" | tee -a placa.log
+          echo "FQBN_COMPLETO=$FQBN:$OPCIONES" >> "$GITHUB_ENV"
+
+      - name: Compilar
+        run: |
+          set -o pipefail
+          arduino-cli compile -b "$FQBN_COMPLETO" --export-binaries --output-dir salida firmware/PRS_MACK_Timer 2>&1 | tee compilar.log
+          ls -la salida | tee -a compilar.log
+
+      - name: Publicar el programa listo
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(grep -m1 -o 'v3\.[0-9]*' firmware/PRS_MACK_Timer/PRS_MACK_Timer.ino | tr '.' '_')
+          cp salida/PRS_MACK_Timer.ino.merged.bin "PRS_MACK_Timer_${VERSION}.bin"
+          cp salida/PRS_MACK_Timer.ino.merged.bin PRS_MACK_Timer.bin
+          gh release delete firmware --yes --cleanup-tag || true
+          gh release create firmware "PRS_MACK_Timer_${VERSION}.bin" PRS_MACK_Timer.bin --target "$GITHUB_SHA" --title "Programa del timer PRS MACK (${VERSION})" --notes "Compilado del commit ${GITHUB_SHA::7}. Se carga completo en la direccion 0x0." --latest=false
+
+      - name: Guardar los registros
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view registro-firmware > /dev/null 2>&1 || gh release create registro-firmware --target "$GITHUB_SHA" --title "Registro de compilacion (programa)" --notes "Ultimos registros." --prerelease --latest=false
+          for f in preparar.log placa.log compilar.log; do [ -f "$f" ] && gh release upload registro-firmware "$f" --clobber; done
