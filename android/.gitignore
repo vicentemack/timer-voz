@@ -2,3 +2,7 @@ build/
 .gradle/
 local.properties
 *.iml
+# la llave de firma nunca va en el repositorio (va en el secreto FIRMA_APP_P12)
+*.p12
+*.jks
+*.keystore

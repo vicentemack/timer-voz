@@ -26,6 +26,21 @@ jobs:
         with:
           gradle-version: '8.9'
 
+      - name: Llave de firma (secreto FIRMA_APP_P12)
+        env:
+          FIRMA_APP_P12: ${{ secrets.FIRMA_APP_P12 }}
+        run: |
+          if [ -z "$FIRMA_APP_P12" ]; then
+            echo "::error::Falta el secreto FIRMA_APP_P12 (la llave de la app). Sin el no se compila ni se publica nada."
+            exit 1
+          fi
+          SECRETO=$(printf '%s' "$FIRMA_APP_P12" | tr -d ' \r\n')
+          CLAVE="${SECRETO%%:*}"
+          echo "::add-mask::$CLAVE"
+          printf '%s' "${SECRETO#*:}" | base64 -d > android/app/firma.p12
+          echo "FIRMA_CLAVE=$CLAVE" >> "$GITHUB_ENV"
+          ls -l android/app/firma.p12
+
       - name: Compilar la app
         working-directory: android
         run: |
@@ -36,6 +51,12 @@ jobs:
         if: failure()
         run: |
           grep -nE "error:|e: |What went wrong|FAILED|Exception" compilacion.log | head -30 | while IFS= read -r l; do echo "::error::${l}"; done
+
+      - name: Revisar la firma
+        run: |
+          AS="$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)/apksigner"
+          echo "== Firma de la app ==" | tee -a compilacion.log
+          "$AS" verify --verbose --print-certs android/app/build/outputs/apk/release/app-release.apk 2>&1 | tee -a compilacion.log
 
       - name: Publicar la app
         if: success()

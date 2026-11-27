@@ -15,23 +15,25 @@ android {
     }
 
     // Firma fija para que cada version nueva se instale encima de la anterior.
+    // La llave y su clave NO estan en el repositorio: antes de compilar, GitHub las saca
+    // del secreto FIRMA_APP_P12 (ver .github/workflows/android.yml), deja la llave en
+    // app/firma.p12 y la clave en la variable FIRMA_CLAVE. Sin ellas, la app sale sin firma.
+    def llave = file('firma.p12')
+    def clave = System.getenv('FIRMA_CLAVE') ?: ''
     signingConfigs {
         firma {
-            storeFile file('firma.p12')
+            storeFile llave
             storeType 'pkcs12'
-            storePassword 'timervoz'
+            storePassword clave
             keyAlias 'timervoz'
-            keyPassword 'timervoz'
+            keyPassword clave
         }
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            signingConfig signingConfigs.firma
-        }
-        debug {
-            signingConfig signingConfigs.firma
+            if (llave.exists() && clave) signingConfig signingConfigs.firma
         }
     }
 
