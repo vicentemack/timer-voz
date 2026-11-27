@@ -42,6 +42,9 @@
   .solo-impreso { display: none; }
   code { background: var(--panel); padding: 1px 5px; border-radius: 4px; }
   td code { overflow-wrap: anywhere; }
+  .qr { display: flex; align-items: center; gap: 14px; margin: 14px 0; break-inside: avoid; }
+  .qr img { width: 140px; height: 140px; flex: none; background: #fff; padding: 4px; border: 1px solid var(--linea); border-radius: 8px; }
+  .qr p { margin: 0; }
   @media (max-width: 620px) { .dos { grid-template-columns: 1fr; } .dos img { max-width: 300px; } h1 { font-size: 30px; } }
   @media print {
     :root { --bg:#fff; --fg:#000; --suave:#444; --linea:#bbb; --panel:#f2f2f2; --acento:#0b6e4f; --acento-fg:#fff; }
@@ -152,8 +155,12 @@
     <a class="boton sec" href="https://drive.google.com/drive/folders/1an5J0CpKaEJ-mXKpKTHvsj7ES79j6TT6">Carpeta con todos los archivos</a>
   </div>
   <div class="caja solo-impreso">Para bajar la app, abre en el teléfono: <b>github.com/vicentemack/timer-voz/releases</b> (archivo PRS_Timer_Voz_App.apk)</div>
+  <div class="qr">
+    <img src="img/qr-app.png" alt="Código QR para bajar la app PRS Timer Voz" width="140" height="140">
+    <p><b>O escanea este código</b> con la cámara de tu teléfono Android: te lleva directo a la app.</p>
+  </div>
   <ol>
-    <li>En el teléfono, abre el botón de arriba en <b>Chrome</b> y deja que se descargue el archivo <code>PRS_Timer_Voz_App.apk</code>.</li>
+    <li>En el teléfono, abre el botón de arriba en <b>Chrome</b> (o escanea el código QR) y deja que se descargue el archivo <code>PRS_Timer_Voz_App.apk</code>.</li>
     <li>Toca <b>Abrir</b>. Si pide permiso para instalar apps de Chrome: <b>Ajustes</b> → activa <b>Permitir de esta fuente</b> → regresa.</li>
     <li>Toca <b>Instalar</b>. Si Play Protect avisa que no conoce la app (porque no viene de la Play Store), puedes dejar que la analice o tocar <b>Más detalles → Instalar de todas formas</b>.</li>
     <li>Abre <b>PRS Timer Voz</b> y toca <b>Conectar con el timer</b>. Permite <b>Dispositivos cercanos</b> y las notificaciones.</li>
@@ -232,7 +239,7 @@
     <tr><td><code>PRS_Timer_Voz_v3_32.bin</code></td><td>El programa ya compilado, en un solo archivo (va en la dirección 0x0). Es el mismo que carga el botón del Paso 1</td></tr>
     <tr><td><code>PRS_Timer_Voz_v3_32.ino</code></td><td>El mismo programa, en código (C++ de Arduino), para quien lo quiera cambiar</td></tr>
     <tr><td><code>PRS_Timer_Voz_App_v1_2.apk</code></td><td>La app de Android, versión 1.2</td></tr>
-    <tr><td><code>PRS_Timer_Voz_Instructivo_v9.pdf</code></td><td>Este instructivo en PDF</td></tr>
+    <tr><td><code>PRS_Timer_Voz_Instructivo_v10.pdf</code></td><td>Este instructivo en PDF</td></tr>
   </table>
   <ul>
     <li><a href="https://drive.google.com/drive/folders/1an5J0CpKaEJ-mXKpKTHvsj7ES79j6TT6">Carpeta en Google Drive</a> (solo para descargar)</li>
