@@ -69,6 +69,10 @@ jobs:
           gh release delete app-android --yes --cleanup-tag || true
           gh release create app-android PRS_Timer_Voz_App.apk "PRS_Timer_Voz_App_v${VERSION}.apk" --target "$GITHUB_SHA" --title "App PRS Timer Voz (Android) v${VERSION}" --notes "Compilada del commit ${GITHUB_SHA::7}." --latest=false
 
+      - name: Borrar la llave del servidor
+        if: always()
+        run: rm -f android/app/firma.p12
+
       - name: Guardar el registro
         if: always()
         env:
