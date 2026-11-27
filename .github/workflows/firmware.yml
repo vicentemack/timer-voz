@@ -71,16 +71,29 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          set +e
+          echo "::notice::archivos: $(ls salida | tr '\n' ' ')"
           VERSION=$(grep -m1 -o 'v3\.[0-9]*' firmware/PRS_MACK_Timer/PRS_MACK_Timer.ino | tr '.' '_')
-          cp salida/PRS_MACK_Timer.ino.merged.bin "PRS_MACK_Timer_${VERSION}.bin"
-          cp salida/PRS_MACK_Timer.ino.merged.bin PRS_MACK_Timer.bin
-          gh release delete firmware --yes --cleanup-tag || true
-          gh release create firmware "PRS_MACK_Timer_${VERSION}.bin" PRS_MACK_Timer.bin --target "$GITHUB_SHA" --title "Programa del timer PRS MACK (${VERSION})" --notes "Compilado del commit ${GITHUB_SHA::7}. Se carga completo en la direccion 0x0." --latest=false
+          BIN=$(ls salida/*merged*.bin 2>/dev/null | head -1)
+          echo "::notice::version=$VERSION bin=$BIN"
+          if [ -z "$BIN" ]; then echo "::error::no salio el archivo merged.bin"; exit 1; fi
+          cp "$BIN" "PRS_MACK_Timer_${VERSION}.bin"
+          cp "$BIN" PRS_MACK_Timer.bin
+          gh release delete firmware --yes --cleanup-tag > gh.log 2>&1
+          gh release create firmware "PRS_MACK_Timer_${VERSION}.bin" PRS_MACK_Timer.bin --target "$GITHUB_SHA" --title "Programa del timer PRS MACK (${VERSION})" --notes "Compilado del commit ${GITHUB_SHA::7}. Se carga completo en la direccion 0x0." --latest=false >> gh.log 2>&1
+          r=$?
+          echo "::notice::gh publicar ($r): $(tail -4 gh.log | tr '\n' ' ')"
+          exit $r
 
       - name: Guardar los registros
         if: always()
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release view registro-firmware > /dev/null 2>&1 || gh release create registro-firmware --target "$GITHUB_SHA" --title "Registro de compilacion (programa)" --notes "Ultimos registros." --prerelease --latest=false
-          for f in preparar.log placa.log compilar.log; do [ -f "$f" ] && gh release upload registro-firmware "$f" --clobber; done
+          set +e
+          gh release view registro-firmware > gh2.log 2>&1 || gh release create registro-firmware --target "$GITHUB_SHA" --title "Registro de compilacion (programa)" --notes "Ultimos registros." --prerelease --latest=false >> gh2.log 2>&1
+          for f in preparar.log placa.log compilar.log; do
+            if [ -f "$f" ]; then gh release upload registro-firmware "$f" --clobber >> gh2.log 2>&1; fi
+          done
+          echo "::notice::gh registros: $(tail -4 gh2.log | tr '\n' ' ')"
+          exit 0
