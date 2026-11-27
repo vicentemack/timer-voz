@@ -50,7 +50,7 @@
     h2, h3 { break-after: avoid; } table, .caja, .aviso, .dos { break-inside: avoid; }
     main { padding-top: 0; }
     .dos { display: flex; flex-direction: column-reverse; break-inside: auto; gap: 6px; }
-    .dos img { width: 160px; margin: 0 auto; }
+    .dos img { width: 125px; margin: 0 auto; }
     h2 { margin-top: 24px; }
     table { break-inside: auto; } tr { break-inside: avoid; }
     .pantallas { grid-template-columns: repeat(7, 1fr); gap: 8px; }
@@ -65,6 +65,13 @@
   <div class="aviso"><b>Versión beta.</b> Este proyecto lo estamos desarrollando entre varios tiradores de PRS en México: compartimos experiencias, comentarios y lo que nos gustaría que hiciera. Lo que creemos que ya funciona bien es el <b>timer con voz</b>, que oyes en los audífonos Bluetooth que usas para tirar: ya lo probamos con la pantalla del teléfono apagada y funcionó. El <b>contador de tiros</b> todavía está en prueba: al día de hoy, 26 de noviembre de 2026, apenas vamos a probar sus sensores con disparos reales, para ajustarlos al sonido del disparo y al retroceso del rifle.</div>
   <p>Usamos el <b>M5StickS3</b> de M5Stack: una microcomputadora programable de 48 × 24 × 15 mm y 20 g, con pantalla a color, micrófono, bocina, acelerómetro, batería y Bluetooth. M5Stack la hizo para control remoto y proyectos de internet de las cosas (IoT), como el control del hogar o los asistentes de voz. <b>No está diseñada para tiro</b>, pero sus características se adaptan a lo que necesitamos: oír el disparo, sentir el retroceso del rifle, mostrar el tiempo y avisarte, por medio del teléfono, en tus audífonos. La estamos probando.</p>
   <p>El StickS3 va en el riel del rifle y trabaja con una <b>app de Android</b>: el StickS3 lleva el tiempo de la etapa y cuenta tus tiros, y la app te avisa en tus audífonos cuánto te queda. El programa y la app son gratis y son para compartir.</p>
+  <h3>Por qué lo hicimos así</h3>
+  <ul>
+    <li><b>Un solo aparato, sin soldar:</b> el StickS3 ya trae pantalla, micrófono, acelerómetro, batería y Bluetooth. Solo se le carga el programa desde la computadora.</li>
+    <li><b>La voz la pone tu teléfono:</b> el StickS3 manda avisos cortos por Bluetooth y la app los dice en los audífonos que ya usas para tirar. No cargas otra bocina ni otros audífonos.</li>
+    <li><b>Te olvidas del teléfono:</b> la app funciona con la pantalla apagada y está hecha para volver a conectarse sola en cada etapa.</li>
+    <li><b>Lo ajustas a tu gusto:</b> los segundos de cada aviso, las frases y los pitidos se pueden cambiar; el código es público.</li>
+  </ul>
   <p>La carcasa para montarlo en el riel la estamos haciendo en colaboración con otro compañero tirador. Les avisaremos cuando esté lista.</p>
 
   <div class="indice no-impreso">
