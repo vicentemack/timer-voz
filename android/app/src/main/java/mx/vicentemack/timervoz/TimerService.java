@@ -45,7 +45,8 @@ import java.util.UUID;
 /**
  * Servicio en primer plano: busca el timer StickS3, se conecta solo (tambien cuando lo vuelves
  * a prender) y dice los avisos por los audifonos, aunque la pantalla este apagada.
- * Protocolo del timer v3.31 (Bluetooth de bajo consumo).
+ * Protocolo del timer v3.31 y v3.32 (Bluetooth de bajo consumo). App PRS MACK 1.1: la primera vez
+ * se queda con el primer timer que encuentra y despues solo se conecta a ese.
  */
 public class TimerService extends Service {
     static final UUID SERVICIO = UUID.fromString("6f3c0001-5b1a-4c7e-9d2a-3e1f5a7b9c10");
@@ -54,6 +55,7 @@ public class TimerService extends Service {
     static final String ACCION_PROBAR = "mx.vicentemack.timervoz.PROBAR";
     static final String ACCION_DETENER = "mx.vicentemack.timervoz.DETENER";
     static final String ACCION_AJUSTES = "mx.vicentemack.timervoz.AJUSTES";
+    static final String ACCION_CAMBIAR = "mx.vicentemack.timervoz.CAMBIAR";
 
     /** Lo que dice en cada aviso del timer (escrito como se pronuncia: "taimer", "erre o"). */
     static final Map<String, String> FRASES = new HashMap<>();
@@ -136,6 +138,13 @@ public class TimerService extends Service {
         }
         corriendo = true;
         detenido = false;
+        if (ACCION_CAMBIAR.equals(accion)) {      // otro timer: olvida el nombre y busca el primero que aparezca
+            prefs.edit().remove("nombre").apply();
+            pararBusqueda();
+            cerrarGatt();
+            if (candado.isHeld()) candado.release();
+            anotar("Buscando otro timer: deja prendido solo el tuyo");
+        }
         voz.mantenerDespierto(prefs.getBoolean("despierto", true));
         if (ACCION_PROBAR.equals(accion)) probar();
         if (gatt == null && !buscando) programarBusqueda(0);
@@ -146,12 +155,12 @@ public class TimerService extends Service {
     // ---------- busqueda ----------
 
     private String nombreBuscado() {
-        return prefs.getString("nombre", "TimerS3").trim();
+        return prefs.getString("nombre", "").trim();
     }
 
     private String nombreParaMostrar() {
         String n = nombreBuscado();
-        return n.isEmpty() ? "TimerS3" : n;
+        return n.isEmpty() ? "tu timer" : n;
     }
 
     private void programarBusqueda(long ms) {
@@ -350,6 +359,10 @@ public class TimerService extends Service {
 
     private void conectado() {
         h.removeCallbacks(tiempoFuera);
+        if (nombreBuscado().isEmpty()) {          // la primera vez se queda con este timer
+            prefs.edit().putString("nombre", nombreConectado).apply();
+            anotar("Este teléfono se quedó con " + nombreConectado);
+        }
         estado("Conectado a " + nombreConectado);
         anotar("Conectado a " + nombreConectado);
         if (prefs.getBoolean("decirConectado", true)) voz.decir("conectado");
@@ -460,11 +473,11 @@ public class TimerService extends Service {
 
     private Notification aviso(String texto) {
         NotificationManager nm = getSystemService(NotificationManager.class);
-        nm.createNotificationChannel(new NotificationChannel("timer", "Timer voz", NotificationManager.IMPORTANCE_LOW));
+        nm.createNotificationChannel(new NotificationChannel("timer", "PRS MACK", NotificationManager.IMPORTANCE_LOW));
         PendingIntent abrir = PendingIntent.getActivity(this, 0,
                 new Intent(this, MainActivity.class), PendingIntent.FLAG_IMMUTABLE);
         return new Notification.Builder(this, "timer")
-                .setContentTitle("Timer voz")
+                .setContentTitle("PRS MACK")
                 .setContentText(texto)
                 .setSmallIcon(android.R.drawable.stat_sys_data_bluetooth)
                 .setContentIntent(abrir)

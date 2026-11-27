@@ -42,9 +42,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          cp android/app/build/outputs/apk/release/app-release.apk TimerVoz.apk
+          VERSION=$(grep -m1 -o "versionName '[0-9.]*'" android/app/build.gradle | grep -o "[0-9.]*" | tr '.' '_')
+          cp android/app/build/outputs/apk/release/app-release.apk PRS_MACK_Timer_App.apk
+          cp android/app/build/outputs/apk/release/app-release.apk "PRS_MACK_Timer_App_v${VERSION}.apk"
           gh release delete app-android --yes --cleanup-tag || true
-          gh release create app-android TimerVoz.apk --target "$GITHUB_SHA" --title "App Timer voz (Android)" --notes "Compilada del commit ${GITHUB_SHA::7}." --latest=false
+          gh release create app-android PRS_MACK_Timer_App.apk "PRS_MACK_Timer_App_v${VERSION}.apk" --target "$GITHUB_SHA" --title "App PRS MACK (Android) v${VERSION}" --notes "Compilada del commit ${GITHUB_SHA::7}." --latest=false
 
       - name: Guardar el registro
         if: always()

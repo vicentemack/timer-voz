@@ -9,14 +9,11 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -27,7 +24,7 @@ import java.util.List;
 /** Pantalla de la app: conectar, probar la voz, ajustes y los avisos que van llegando. */
 public class MainActivity extends Activity {
     private SharedPreferences prefs;
-    private TextView estado, fase, segundos, detalle, bitacora;
+    private TextView estado, fase, segundos, detalle, bitacora, tuTimer;
     private Button conectar;
     private String pendiente;          // lo que se queria hacer antes de pedir permisos
 
@@ -43,7 +40,8 @@ public class MainActivity extends Activity {
         col.setPadding(m, m, m, m);
         marco.addView(col);
 
-        col.addView(texto("Timer voz", 26, true));
+        col.addView(texto("PRS MACK", 26, true));
+        col.addView(texto("Timer y voz para el StickS3", 15, false));
         estado = texto("Detenido", 16, false);
         col.addView(estado);
 
@@ -61,25 +59,9 @@ public class MainActivity extends Activity {
         col.addView(conectar, margen());
         col.addView(boton("Probar voz y pitidos", v -> pedirOIniciar(TimerService.ACCION_PROBAR)), margen());
 
-        col.addView(texto("Nombre de tu timer (el de Vicente: TimerS3)", 14, false), margen());
-        EditText nombre = new EditText(this);
-        nombre.setSingleLine(true);
-        nombre.setText(prefs.getString("nombre", "TimerS3"));
-        nombre.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int inicio, int cuantos, int despues) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int inicio, int antes, int cuantos) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                prefs.edit().putString("nombre", s.toString().trim()).apply();
-            }
-        });
-        col.addView(nombre);
+        tuTimer = texto("", 16, true);
+        col.addView(tuTimer, margen());
+        col.addView(boton("Cambiar de timer", v -> cambiarDeTimer()));
 
         col.addView(casilla("Mantener despiertos los audífonos, para que no se coman la primera sílaba", "despierto"), margen());
         col.addView(casilla("Decir “conectado” cuando se conecta el timer", "decirConectado"));
@@ -89,7 +71,8 @@ public class MainActivity extends Activity {
         col.addView(texto("Qué dice: al picar el azul, “Prepárate. Cinco segundos para que se arme el timer”; "
                 + "a los 5 s, “Armado. Ya puedes decirle listo al R. O.”; al arrancar, 6 pitidos cortos; "
                 + "“sesenta”, “cuarenta y cinco” y “veinticinco”; la cuenta de diez a uno; y en 0, 6 pitidos largos. "
-                + "Funciona con la pantalla apagada: deja la app conectada. Cuando vuelves a prender el timer, se conecta solo.",
+                + "Funciona con la pantalla apagada: deja la app conectada. Cuando vuelves a prender el timer, se conecta solo. "
+                + "La primera vez, prende solo tu timer: la app se queda con él (su nombre sale abajo en la pantalla del timer).",
                 14, false), margen());
 
         col.addView(texto("Avisos recibidos", 16, true), margen());
@@ -118,6 +101,8 @@ public class MainActivity extends Activity {
         segundos.setText(TimerService.segundos);
         detalle.setText("Tiros " + TimerService.tiros + "   Batería " + TimerService.bateria);
         conectar.setText(TimerService.corriendo ? "Detener" : "Conectar con el timer");
+        String n = prefs.getString("nombre", "").trim();
+        tuTimer.setText(n.isEmpty() ? "Tu timer: se escoge solo la primera vez" : "Tu timer: " + n);
         StringBuilder sb = new StringBuilder();
         synchronized (TimerService.bitacora) {
             for (String linea : TimerService.bitacora) sb.append(linea).append('\n');
@@ -186,6 +171,16 @@ public class MainActivity extends Activity {
         Intent i = new Intent(this, TimerService.class);
         if (accion != null) i.setAction(accion);
         startForegroundService(i);
+    }
+
+    private void cambiarDeTimer() {
+        prefs.edit().remove("nombre").apply();
+        if (TimerService.corriendo) {
+            Intent i = new Intent(this, TimerService.class);
+            i.setAction(TimerService.ACCION_CAMBIAR);
+            startForegroundService(i);
+        }
+        refrescar();
     }
 
     private void avisarAjustes() {
