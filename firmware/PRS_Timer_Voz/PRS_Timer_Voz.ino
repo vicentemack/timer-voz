@@ -1,4 +1,4 @@
-// PRS MACK - Timer y contador M5StickS3 - v3.32 (26-nov-2026)
+// PRS Timer Voz - Timer y contador M5StickS3 - v3.32 (26-nov-2026)
 // PANTALLA DE TIMER (la normal), en vertical: arriba los tiros en grande,
 // abajo los segundos que quedan y hasta abajo 5 barritas de bateria.
 //  - Tiempo de la etapa: 105 o 120 s; se escoge en la pantalla de prueba.

@@ -45,7 +45,7 @@ import java.util.UUID;
 /**
  * Servicio en primer plano: busca el timer StickS3, se conecta solo (tambien cuando lo vuelves
  * a prender) y dice los avisos por los audifonos, aunque la pantalla este apagada.
- * Protocolo del timer v3.31 y v3.32 (Bluetooth de bajo consumo). App PRS MACK 1.1: la primera vez
+ * Protocolo del timer v3.31 y v3.32 (Bluetooth de bajo consumo). App 1.1 (desde la 1.2 se llama PRS Timer Voz): la primera vez
  * se queda con el primer timer que encuentra y despues solo se conecta a ese.
  */
 public class TimerService extends Service {
@@ -473,11 +473,11 @@ public class TimerService extends Service {
 
     private Notification aviso(String texto) {
         NotificationManager nm = getSystemService(NotificationManager.class);
-        nm.createNotificationChannel(new NotificationChannel("timer", "PRS MACK", NotificationManager.IMPORTANCE_LOW));
+        nm.createNotificationChannel(new NotificationChannel("timer", "PRS Timer Voz", NotificationManager.IMPORTANCE_LOW));
         PendingIntent abrir = PendingIntent.getActivity(this, 0,
                 new Intent(this, MainActivity.class), PendingIntent.FLAG_IMMUTABLE);
         return new Notification.Builder(this, "timer")
-                .setContentTitle("PRS MACK")
+                .setContentTitle("PRS Timer Voz")
                 .setContentText(texto)
                 .setSmallIcon(android.R.drawable.stat_sys_data_bluetooth)
                 .setContentIntent(abrir)

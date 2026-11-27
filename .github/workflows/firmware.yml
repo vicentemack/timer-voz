@@ -63,7 +63,7 @@ jobs:
       - name: Compilar
         run: |
           set -o pipefail
-          arduino-cli compile -b "$FQBN_COMPLETO" --export-binaries --output-dir salida firmware/PRS_MACK_Timer 2>&1 | tee compilar.log
+          arduino-cli compile -b "$FQBN_COMPLETO" --export-binaries --output-dir salida firmware/PRS_Timer_Voz 2>&1 | tee compilar.log
           ls -la salida | tee -a compilar.log
 
       - name: Publicar el programa listo
@@ -73,14 +73,14 @@ jobs:
         run: |
           set +e
           echo "::notice::archivos: $(ls salida | tr '\n' ' ')"
-          VERSION=$(grep -m1 -o 'v3\.[0-9]*' firmware/PRS_MACK_Timer/PRS_MACK_Timer.ino | tr '.' '_')
+          VERSION=$(grep -m1 -o 'v3\.[0-9]*' firmware/PRS_Timer_Voz/PRS_Timer_Voz.ino | tr '.' '_')
           BIN=$(ls salida/*merged*.bin 2>/dev/null | head -1)
           echo "::notice::version=$VERSION bin=$BIN"
           if [ -z "$BIN" ]; then echo "::error::no salio el archivo merged.bin"; exit 1; fi
-          cp "$BIN" "PRS_MACK_Timer_${VERSION}.bin"
-          cp "$BIN" PRS_MACK_Timer.bin
+          cp "$BIN" "PRS_Timer_Voz_${VERSION}.bin"
+          cp "$BIN" PRS_Timer_Voz.bin
           gh release delete firmware --yes --cleanup-tag > gh.log 2>&1
-          gh release create firmware "PRS_MACK_Timer_${VERSION}.bin" PRS_MACK_Timer.bin --target "$GITHUB_SHA" --title "Programa del timer PRS MACK (${VERSION})" --notes "Compilado del commit ${GITHUB_SHA::7}. Se carga completo en la direccion 0x0." --latest=false >> gh.log 2>&1
+          gh release create firmware "PRS_Timer_Voz_${VERSION}.bin" PRS_Timer_Voz.bin --target "$GITHUB_SHA" --title "Programa PRS Timer Voz (${VERSION})" --notes "Compilado del commit ${GITHUB_SHA::7}. Se carga completo en la direccion 0x0." --latest=false >> gh.log 2>&1
           r=$?
           echo "::notice::gh publicar ($r): $(tail -4 gh.log | tr '\n' ' ')"
           exit $r

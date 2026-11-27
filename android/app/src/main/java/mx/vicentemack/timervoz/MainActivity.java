@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
         col.setPadding(m, m, m, m);
         marco.addView(col);
 
-        col.addView(texto("PRS MACK", 26, true));
+        col.addView(texto("PRS Timer Voz", 26, true));
         col.addView(texto("Timer y voz para el StickS3", 15, false));
         estado = texto("Detenido", 16, false);
         col.addView(estado);
